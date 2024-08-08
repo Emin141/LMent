@@ -1,19 +1,24 @@
 cmake_minimum_required(VERSION 3.10)
+project(Minesweeper)
 
-# Project name and version
-project(Minesweeper VERSION 1.0)
+# Find SFML
+find_package(SFML 2.5 REQUIRED graphics window system)
 
-# Specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+# Set the default build type if not specified
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
 
-# Add the executable
-add_executable(Minesweeper src/main.cpp)
+# Recursively find all .cpp files in the src directory
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-# Find and link SFML (assuming SFML is installed in the default locations)
-find_package(SFML 2.5 COMPONENTS system window graphics REQUIRED)
-target_link_libraries(Minesweeper sfml-system sfml-window sfml-graphics)
+# Add executable target
+add_executable(Minesweeper ${SOURCES})
 
-# Include directories
-target_include_directories(Minesweeper PRIVATE include)
+# Link SFML libraries
+target_link_libraries(Minesweeper sfml-graphics sfml-window sfml-system)
 
+# Add compile options for Debug
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(Minesweeper PRIVATE -g -O0)
+endif()
