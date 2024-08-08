@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/emin/Projects/Minesweeper/build",
-  "command": "/usr/bin/c++   -I/home/emin/Projects/Minesweeper/include  -g   -std=gnu++17 -o CMakeFiles/Minesweeper.dir/src/main.cpp.o -c /home/emin/Projects/Minesweeper/src/main.cpp",
-  "file": "/home/emin/Projects/Minesweeper/src/main.cpp"
-}
-]
