@@ -4,21 +4,22 @@ project(Minesweeper)
 # Find SFML
 find_package(SFML 2.5 REQUIRED graphics window system)
 
-# Set the default build type if not specified
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
-endif()
-
-# Recursively find all .cpp files in the src directory
+# Recursively find all .cpp files in the src directories
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-# Add executable target
+# Setup include directories
+include_directories(include third_party/include)
+
+# Setup for Debug Build
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/Debug)
+add_executable(Minesweeper_Debug ${SOURCES})
+target_compile_definitions(Minesweeper_Debug PRIVATE DEBUG_BUILD SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
+target_compile_options(Minesweeper_Debug PRIVATE -O0 -g)
+target_link_libraries(Minesweeper_Debug sfml-graphics sfml-window sfml-system)
+
+# Setup for Release Build
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/Release)
 add_executable(Minesweeper ${SOURCES})
-
-# Link SFML libraries
+target_compile_definitions(Minesweeper PRIVATE SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_INFO)
+target_compile_options(Minesweeper PRIVATE -O2)
 target_link_libraries(Minesweeper sfml-graphics sfml-window sfml-system)
-
-# Add compile options for Debug
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_options(Minesweeper PRIVATE -g -O0)
-endif()
