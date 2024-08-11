@@ -38,3 +38,5 @@
 *.user
 .vscode/
 *.sh
+*.log
+/log/
