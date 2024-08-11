@@ -1,10 +1,9 @@
 #include "game.h"
 #include "defines.h"
+#include "misc_util.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
-#include <fstream>
-
 /* -------------------------------------------------------------------------- */
 Game::Game() : window_(sf::VideoMode(800, 600), "Ceco Minesweeper") {
   // TODO(emin) should I maybe find another way of error handling?
@@ -35,9 +34,9 @@ bool Game::initialize_logging() {
     console_sink->set_pattern(
         "[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
 
-    // TODO(emin) Maybe I should make a log directory with different log files?
     auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-        "Minesweeper.log", true);
+        "logs/Minesweeper_" + util::current_datetime_as_string() + ".log",
+        true);
     file_sink->set_level(spdlog::level::trace);
 
     spdlog::sinks_init_list sink_list = {file_sink, console_sink};
@@ -52,10 +51,8 @@ bool Game::initialize_logging() {
     spdlog::info("Logging library successfully initialized");
 
   } catch (const spdlog::spdlog_ex &ex) {
-    std::ofstream outputFile("Minesweeper.log");
-    if (outputFile.is_open()) {
-      outputFile << "Log initialization failed: " << ex.what() << std::endl;
-    }
+    std::fprintf(stderr, "Log initialization failed: %s\n", ex.what());
+    std::fflush(stderr);
     return false;
   }
 
