@@ -16,10 +16,15 @@ public:
 
 private:
   /* ------------------------------- Variables ------------------------------ */
+  bool isRunning_{false};
   sf::RenderWindow window_;
 
   /* -------------------------------- Functions ----------------------------- */
   bool initialize_logging();
+
+  void poll_events();
+  void update();
+  void draw();
   void exit();
 };
 /* -------------------------------------------------------------------------- */

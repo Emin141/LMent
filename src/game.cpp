@@ -5,25 +5,23 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 /* -------------------------------------------------------------------------- */
-Game::Game() : window_(sf::VideoMode(800, 600), "Ceco Minesweeper") {
-  // TODO(emin) should I maybe find another way of error handling?
+Game::Game() : window_(sf::VideoMode(800, 600), "LMent") {
+  // TODO should I maybe find another way of error handling?
   if (initialize_logging() == false) {
     exit();
   }
+
+  isRunning_ = true;
 }
 /* -------------------------------------------------------------------------- */
 void Game::run() {
-  while (window_.isOpen()) {
-    sf::Event event;
-    while (window_.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
-        window_.close();
-    }
-
-    window_.clear();
-    // Drawing code here
-    window_.display();
+  while (isRunning_) {
+    poll_events();
+    update();
+    draw();
   }
+
+  exit();
 }
 /* -------------------------------------------------------------------------- */
 bool Game::initialize_logging() {
@@ -35,8 +33,7 @@ bool Game::initialize_logging() {
         "[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
 
     auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-        "logs/Minesweeper_" + util::current_datetime_as_string() + ".log",
-        true);
+        "logs/LMent_" + util::current_datetime_as_string() + ".log", true);
     file_sink->set_level(spdlog::level::trace);
 
     spdlog::sinks_init_list sink_list = {file_sink, console_sink};
@@ -60,4 +57,23 @@ bool Game::initialize_logging() {
 }
 /* -------------------------------------------------------------------------- */
 void Game::exit() { spdlog::info("Exiting the game."); }
+/* -------------------------------------------------------------------------- */
+void Game::poll_events() {
+  sf::Event event;
+  while (window_.pollEvent(event)) {
+    if (event.type == sf::Event::Closed)
+      // TODO Don't do any logic here, broadcast signals instead.
+      isRunning_ = false;
+  }
+}
+/* -------------------------------------------------------------------------- */
+void Game::update() {
+  // TODO add logic code.
+}
+/* -------------------------------------------------------------------------- */
+void Game::draw() {
+  window_.clear();
+  // Drawing code here
+  window_.display();
+}
 /* -------------------------------------------------------------------------- */
