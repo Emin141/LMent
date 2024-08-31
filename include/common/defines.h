@@ -2,7 +2,7 @@
 /* -------------------------------------------------------------------------- */
 // This will notify during compile time that the debug build is running
 #ifdef DEBUG_BUILD
-#pragma message("Running DEBUG_BUILD")
+#pragma message("Building DEBUG")
 #endif
 /* -------------------------------------------------------------------------- */
 // Define logging levels using spdlog enums

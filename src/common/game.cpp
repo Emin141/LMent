@@ -1,27 +1,17 @@
-#include "game.h"
-#include "defines.h"
-#include "misc_util.h"
+#include "common/game.h"
+#include "common/defines.h"
+#include "common/misc_util.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 /* -------------------------------------------------------------------------- */
-Game::Game() : window_(sf::VideoMode(800, 600), "LMent") {
+Game::Game() {
   // TODO should I maybe find another way of error handling?
   if (initialize_logging() == false) {
     exit();
   }
 
   isRunning_ = true;
-}
-/* -------------------------------------------------------------------------- */
-void Game::run() {
-  while (isRunning_) {
-    poll_events();
-    update();
-    draw();
-  }
-
-  exit();
 }
 /* -------------------------------------------------------------------------- */
 bool Game::initialize_logging() {
@@ -57,23 +47,4 @@ bool Game::initialize_logging() {
 }
 /* -------------------------------------------------------------------------- */
 void Game::exit() { spdlog::info("Exiting the game."); }
-/* -------------------------------------------------------------------------- */
-void Game::poll_events() {
-  sf::Event event;
-  while (window_.pollEvent(event)) {
-    if (event.type == sf::Event::Closed)
-      // TODO Don't do any logic here, broadcast signals instead.
-      isRunning_ = false;
-  }
-}
-/* -------------------------------------------------------------------------- */
-void Game::update() {
-  // TODO add logic code.
-}
-/* -------------------------------------------------------------------------- */
-void Game::draw() {
-  window_.clear();
-  // Drawing code here
-  window_.display();
-}
 /* -------------------------------------------------------------------------- */
