@@ -1,9 +1,5 @@
 #pragma once
 /* -------------------------------------------------------------------------- */
-#ifdef DEBUG_BUILD
-#pragma message("Building debug.")
-#endif
-/* -------------------------------------------------------------------------- */
 // Define logging levels using spdlog enums
 #ifdef DEBUG_BUILD
 #define LOG_LEVEL spdlog::level::debug

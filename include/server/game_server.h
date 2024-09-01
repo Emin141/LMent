@@ -5,7 +5,6 @@ enforce game rules.
 */
 /* -------------------------------------------------------------------------- */
 #pragma once
-#include "common/defines.h"
 #include "common/game.h"
 #include "server/server_network.h"
 #include <SFML/Network.hpp>

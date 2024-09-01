@@ -1,10 +1,7 @@
 #include "server/game_server.h"
 #include "common/defines.h"
-#include "common/misc_util.h"
 #include "spdlog/spdlog.h"
 #include <SFML/System.hpp>
-#include <iostream>
-#include <sstream>
 /* -------------------------------------------------------------------------- */
 GameServer::GameServer() : Game::Game() {
   if (!initialize_network()) {

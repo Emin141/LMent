@@ -1,9 +1,10 @@
 /*
-TODO document
+This class is responsible for most of what the player sees. It extends the basic
+common functionality of the server and client and
 */
 /* -------------------------------------------------------------------------- */
 #pragma once
-#include "common/defines.h"
+#include "client/client_network.h"
 #include "common/game.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
@@ -15,10 +16,7 @@ public:
 
 private:
   /* ------------------------------- Variables ------------------------------ */
-  // TODO move network related variables to a network manager.
-  uint16_t serverPort_{DEFAULT_PORT};
-  sf::IpAddress serverAddress_{"127.0.0.1"};
-  sf::TcpSocket socket_{};
+  ClientNetwork network_;
   sf::RenderWindow window_;
 
   /* -------------------------------- Functions ----------------------------- */
