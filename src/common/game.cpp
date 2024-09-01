@@ -8,7 +8,7 @@
 Game::Game() {
   // TODO should I maybe find another way of error handling?
   if (!initialize_logging()) {
-    exit();
+    abort();
   }
 
   isRunning_ = true;
@@ -46,7 +46,7 @@ bool Game::initialize_logging() {
   return true;
 }
 /* -------------------------------------------------------------------------- */
-void Game::exit() {
+void Game::abort() {
   spdlog::info("Exiting the game.");
   std::exit(EXIT_FAILURE); // TODO maybe specify my own codes here?
 }

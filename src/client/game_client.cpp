@@ -1,17 +1,15 @@
 #include "client/game_client.h"
-#include "common/misc_util.h"
+#include "common/game_started_message.h"
 #include "spdlog/spdlog.h"
 #include <SFML/Network/Socket.hpp>
 #include <SFML/System/Time.hpp>
-#include <iostream>
-#include <sstream>
 /* -------------------------------------------------------------------------- */
 GameClient::GameClient()
     : Game::Game(),
       window_(sf::VideoMode(800, 600), "LMent", sf::Style::Default) {
   window_.setVisible(false);
   if (!initialize_network()) {
-    exit();
+    abort();
   }
 
   window_.setVisible(true);
@@ -31,39 +29,17 @@ void GameClient::run() {
 
     deltaTime = dtClock.restart().asSeconds();
   }
-
-  exit();
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::update(float deltaTime) {
   // TODO add logic code.
 }
 /* -------------------------------------------------------------------------- */
-void GameClient::exit() { Game::exit(); }
+void GameClient::abort() { Game::abort(); }
 /* -------------------------------------------------------------------------- */
 bool GameClient::initialize_network() {
   // TODO temporary, the port and player number should be specified in the GUI
   spdlog::info("Initializing network.");
-
-  /* std::string inputLine;
-  std::printf("Server IP address: ");
-  if (std::getline(std::cin, inputLine)) {
-    std::stringstream lineStream{inputLine};
-    lineStream >> serverAddress_;
-  } else {
-    spdlog::error("Failed to read IP address.");
-    return false;
-  }
-
-  std::printf("Server port (40000 - 60000): ");
-  if (std::getline(std::cin, inputLine)) {
-    std::stringstream lineStream{inputLine};
-    lineStream >> serverPort_;
-    util::clamp<int>(serverPort_, 40000, 60000);
-  } else {
-    spdlog::error("Failed to read port number.");
-    return false;
-  } */
 
   if (socket_.connect(serverAddress_, serverPort_, sf::Time(sf::seconds(10))) !=
       sf::Socket::Done) {
@@ -74,6 +50,24 @@ bool GameClient::initialize_network() {
 
   spdlog::info("Client has connected to server at {}:{}.",
                serverAddress_.toString(), serverPort_);
+
+  spdlog::info("Waiting for host to start the match.");
+  sf::Packet receivedPacket{};
+  if (socket_.receive(receivedPacket) != sf::Socket::Done) {
+    spdlog::error("Failed to receive GameStarted message from server.");
+    return false;
+  }
+
+  GameStartedMessage message;
+  receivedPacket >> message;
+
+  spdlog::info("Received GameStarted message as playerId:{}, playerCount:{}.",
+               message.thisPlayerId, message.initialPlayerInfoList.size());
+
+  for (const auto &playerInfo : message.initialPlayerInfoList) {
+    spdlog::debug("Player {} is at {}.", playerInfo.id, playerInfo.position);
+  }
+
   return true;
 }
 /* -------------------------------------------------------------------------- */

@@ -22,6 +22,6 @@ protected:
   /* -------------------------------- Functions ----------------------------- */
   virtual bool initialize_logging();
   virtual void update(float deltaTime) = 0;
-  virtual void exit(); // Has some default logic.
+  virtual void abort(); // Has some default logic.
 };
 /* -------------------------------------------------------------------------- */
