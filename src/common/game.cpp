@@ -7,7 +7,7 @@
 /* -------------------------------------------------------------------------- */
 Game::Game() {
   // TODO should I maybe find another way of error handling?
-  if (initialize_logging() == false) {
+  if (!initialize_logging()) {
     exit();
   }
 
@@ -46,5 +46,8 @@ bool Game::initialize_logging() {
   return true;
 }
 /* -------------------------------------------------------------------------- */
-void Game::exit() { spdlog::info("Exiting the game."); }
+void Game::exit() {
+  spdlog::info("Exiting the game.");
+  std::exit(EXIT_FAILURE); // TODO maybe specify my own codes here?
+}
 /* -------------------------------------------------------------------------- */

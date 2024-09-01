@@ -12,17 +12,16 @@ server instances.
 class Game {
 public:
   // Nothing else should be in the public interface.
-  Game(); // Acts as a setup function as well.
-  virtual void run() = 0;
+  Game();                 // Acts as a setup function as well.
+  virtual void run() = 0; // TODO maybe this shouldn't be virtual?
 
 protected:
   /* ------------------------------- Variables ------------------------------ */
   bool isRunning_{false};
 
   /* -------------------------------- Functions ----------------------------- */
-  bool initialize_logging();
-
-  virtual void update() = 0;
+  virtual bool initialize_logging();
+  virtual void update(float deltaTime) = 0;
   virtual void exit(); // Has some default logic.
 };
 /* -------------------------------------------------------------------------- */

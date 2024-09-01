@@ -1,3 +1,6 @@
-#include <cstdio>
+#include "server/game_server.h"
 
-int main() { std::fprintf(stderr, "\033[31;1mImplement server.\033[0m\n"); }
+int main() {
+  GameServer gameServer;
+  gameServer.run();
+}
