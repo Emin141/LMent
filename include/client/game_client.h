@@ -1,6 +1,7 @@
 /*
 This class is responsible for most of what the player sees. It extends the basic
-common functionality of the server and client and
+common functionality of the server and client and handles input, connections,
+rendering, and such.
 */
 /* -------------------------------------------------------------------------- */
 #pragma once
