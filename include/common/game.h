@@ -12,8 +12,8 @@ server instances.
 class Game {
 public:
   // Nothing else should be in the public interface.
-  Game();                 // Acts as a setup function as well.
-  virtual void run() = 0; // TODO maybe this shouldn't be virtual?
+  Game();
+  virtual void run() = 0;
 
 protected:
   /* ------------------------------- Variables ------------------------------ */

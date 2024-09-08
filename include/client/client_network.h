@@ -16,13 +16,20 @@ public:
   void set_ip_address(const sf::IpAddress &serverAddress);
   void set_port(int serverPort);
   void connect();
+  void send_turn_step(/* TODO add turn step message */);
+  void check_connection();
+  inline bool connected() const { return connected_; };
 
 private:
   /* ------------------------------- Variables ------------------------------ */
   sf::IpAddress serverAddress_{};
   int serverPort_{DEFAULT_PORT};
   sf::TcpSocket socket_{};
+  bool connected_{false};
+  uint8_t playerId{};
 
   /* ------------------------------- Functions ------------------------------ */
+  void handle_game_start();
+  void reconnect();
 };
 /* -------------------------------------------------------------------------- */

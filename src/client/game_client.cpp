@@ -3,6 +3,7 @@
 #include "spdlog/spdlog.h"
 #include <SFML/Network/Socket.hpp>
 #include <SFML/System/Time.hpp>
+#include <SFML/Window/Keyboard.hpp>
 /* -------------------------------------------------------------------------- */
 GameClient::GameClient()
     : Game::Game(),
@@ -18,7 +19,7 @@ void GameClient::run() {
     sf::Clock dtClock;
 
     poll_events();
-    update(deltaTime);
+    update(deltaTime); // TODO Do I even need this?
     draw();
 
     deltaTime = dtClock.restart().asSeconds();
@@ -26,15 +27,16 @@ void GameClient::run() {
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::update(float deltaTime) {
-  // TODO Remove the flag. This should be called in a connect to host screen.
-  if (!networkInitalized_) {
+  // TODO Remove this. This should be called in a connect to host screen.
+  if (!network_.connected()) {
     if (!initialize_network()) {
       abort();
     }
     window_.setVisible(true);
     window_.setFramerateLimit(60);
-    networkInitalized_ = true;
   }
+
+  network_.check_connection();
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::abort() { Game::abort(); }
@@ -52,11 +54,17 @@ bool GameClient::initialize_network() {
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::poll_events() {
+  // TODO Create event handling
   sf::Event event;
   while (window_.pollEvent(event)) {
-    if (event.type == sf::Event::Closed)
-      // TODO Create event handling
+    switch (event.type) {
+    case sf::Event::Closed: {
       isRunning_ = false;
+      break;
+    }
+    default:
+      break;
+    }
   }
 }
 /* -------------------------------------------------------------------------- */

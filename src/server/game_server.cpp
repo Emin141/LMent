@@ -3,22 +3,19 @@
 #include "spdlog/spdlog.h"
 #include <SFML/System.hpp>
 /* -------------------------------------------------------------------------- */
-GameServer::GameServer() : Game::Game() {
-  if (!initialize_network()) {
+GameServer::GameServer() : Game::Game() {}
+/* -------------------------------------------------------------------------- */
+void GameServer::init(int playerCount, int port) {
+  if (!initialize_network(playerCount, port)) {
     abort();
   }
 }
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------- */
 void GameServer::run() {
   spdlog::info("Running server.");
 
-  float deltaTime{1.0f / 60};
   while (isRunning_) {
-    sf::Clock dtClock;
-
-    update(deltaTime);
-
-    deltaTime = dtClock.restart().asSeconds();
+    update(0.0f); // Server does not need time delta.
   }
 }
 /* -------------------------------------------------------------------------- */
@@ -26,7 +23,7 @@ void GameServer::update(float deltaTime) {}
 /* -------------------------------------------------------------------------- */
 void GameServer::abort() { Game::abort(); }
 /* -------------------------------------------------------------------------- */
-bool GameServer::initialize_network() {
+bool GameServer::initialize_network(int playerCount, int port) {
   // TODO temporary, the port and player count should be specified in the GUI
   spdlog::info("Initializing network.");
 

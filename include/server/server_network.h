@@ -21,7 +21,7 @@ public:
   void set_port(int port);
   void set_player_count(int playerCount);
   void listen_for_connections();
-  void broadcast(MessageType messageType);
+  void broadcast(MessageType messageType /* TODO Polymorphic message here? */);
 
 private:
   /* ------------------------------- Variables ------------------------------ */

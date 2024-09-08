@@ -6,7 +6,9 @@ enum class MessageType : uint8_t {
   Error = 0,
   GameStarted,
   PlayerDisconnected,
-  Update
+  Update,
+  TurnStep, // 5 turn steps per player turn
+  UndoStep
 };
 /* -------------------------------------------------------------------------- */
 inline sf::Packet &operator>>(sf::Packet &packet, MessageType &messageType) {

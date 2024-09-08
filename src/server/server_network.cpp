@@ -36,6 +36,7 @@ void ServerNetwork::listen_for_connections() {
     // Check for disconnections using explicit iterator.
     for (auto it = sockets_.begin(); it != sockets_.end();) {
       sf::Packet dummyPacket;
+      // it->second is the socket. I have STL very often.
       if (it->second->receive(dummyPacket) == sf::Socket::Disconnected) {
         spdlog::warn("Player {} has disconnected. Connection is not saved.",
                      it->first);

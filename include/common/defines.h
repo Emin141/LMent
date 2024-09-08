@@ -12,4 +12,5 @@
 #define INVALID_PLAYER_ID (-1)
 #define MAX_BYTES_IN_MESSAGE (32)
 #define DEFAULT_PORT (50000)
+#define MAX_RECONNECT_ATTEMPTS (5)
 /* -------------------------------------------------------------------------- */
