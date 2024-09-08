@@ -1,9 +1,5 @@
 #pragma once
 #include <cstdint>
 /* -------------------------------------------------------------------------- */
-struct Message {
-  enum class Type : uint8_t { GameStarted };
-
-  Type type_;
-};
+using PlayerId = uint8_t;
 /* -------------------------------------------------------------------------- */

@@ -1,11 +1,12 @@
 #include "client/client_network.h"
 #include "common/game_started_message.h"
+#include "common/message_type.h"
 #include "spdlog/spdlog.h"
 /* -------------------------------------------------------------------------- */
 void ClientNetwork::connect() {
   if (socket_.connect(serverAddress_, serverPort_, sf::Time(sf::seconds(10))) !=
       sf::Socket::Done) {
-    spdlog::error("Failed to connect to server at {}:{}.",
+    spdlog::error("Failed to connect to server at {}:{} after 10 seconds.",
                   serverAddress_.toString(), serverPort_);
     abort();
   }
@@ -17,6 +18,13 @@ void ClientNetwork::connect() {
   sf::Packet receivedPacket{};
   if (socket_.receive(receivedPacket) != sf::Socket::Done) {
     spdlog::error("Failed to receive GameStarted message from server.");
+    abort();
+  }
+
+  MessageType messageType{};
+  receivedPacket >> messageType;
+  if (messageType != MessageType::GameStarted) {
+    spdlog::critical("Message received from server was not GameStarted.");
     abort();
   }
 

@@ -30,7 +30,7 @@ bool GameServer::initialize_network() {
   // TODO temporary, the port and player count should be specified in the GUI
   spdlog::info("Initializing network.");
 
-  network_.set_max_number_of_players(MIN_NUMBER_OF_PLAYERS);
+  network_.set_player_count(MIN_NUMBER_OF_PLAYERS);
   network_.set_port(DEFAULT_PORT);
 
   network_.listen_for_connections();

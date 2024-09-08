@@ -7,23 +7,31 @@ send messages by calls from the server class.
 /* -------------------------------------------------------------------------- */
 #pragma once
 #include "common/defines.h"
+#include "common/message_type.h"
+#include "common/player_id.h"
 #include <SFML/Network.hpp>
+#include <SFML/Network/IpAddress.hpp>
+#include <SFML/Network/SocketSelector.hpp>
+#include <memory>
+#include <unordered_map>
 /* -------------------------------------------------------------------------- */
 class ServerNetwork {
 public:
   /* ------------------------------- Functions ------------------------------ */
   void set_port(int port);
-  void set_max_number_of_players(int playerCount);
+  void set_player_count(int playerCount);
   void listen_for_connections();
+  void broadcast(MessageType messageType);
 
 private:
   /* ------------------------------- Variables ------------------------------ */
   int port_{DEFAULT_PORT};
   uint8_t playerCount_{MIN_NUMBER_OF_PLAYERS};
   sf::TcpListener socketListener_{};
-  sf::TcpSocket sockets_[MAX_NUMBER_OF_PLAYERS];
+  std::unordered_map<PlayerId, std::unique_ptr<sf::TcpSocket>> sockets_;
+  std::unordered_map<PlayerId, sf::IpAddress> playerAddresses_;
 
   /* ------------------------------- Functions ------------------------------ */
-  void send_game_started(uint8_t playerId);
+  void broadcast_game_started();
 };
 /* -------------------------------------------------------------------------- */

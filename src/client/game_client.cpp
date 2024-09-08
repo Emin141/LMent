@@ -1,6 +1,5 @@
 #include "client/game_client.h"
 #include "common/defines.h"
-#include "common/game_started_message.h"
 #include "spdlog/spdlog.h"
 #include <SFML/Network/Socket.hpp>
 #include <SFML/System/Time.hpp>
@@ -9,12 +8,6 @@ GameClient::GameClient()
     : Game::Game(),
       window_(sf::VideoMode(800, 600), "LMent", sf::Style::Default) {
   window_.setVisible(false);
-  if (!initialize_network()) {
-    abort();
-  }
-
-  window_.setVisible(true);
-  window_.setFramerateLimit(60);
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::run() {
@@ -33,7 +26,15 @@ void GameClient::run() {
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::update(float deltaTime) {
-  // TODO add logic code.
+  // TODO Remove the flag. This should be called in a connect to host screen.
+  if (!networkInitalized_) {
+    if (!initialize_network()) {
+      abort();
+    }
+    window_.setVisible(true);
+    window_.setFramerateLimit(60);
+    networkInitalized_ = true;
+  }
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::abort() { Game::abort(); }

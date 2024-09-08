@@ -18,6 +18,7 @@ private:
   /* ------------------------------- Variables ------------------------------ */
   ClientNetwork network_;
   sf::RenderWindow window_;
+  bool networkInitalized_{false};
 
   /* -------------------------------- Functions ----------------------------- */
   bool initialize_network();

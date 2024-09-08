@@ -1,16 +1,13 @@
 #pragma once
 #include "common/extensions.h"
-#include "common/message.h"
 #include <SFML/Network/Packet.hpp>
 #include <vector>
 /* -------------------------------------------------------------------------- */
-struct GameStartedMessage : Message {
+struct GameStartedMessage {
   struct InitialPlayerInfo {
     uint8_t id;
     uint8_t position; // Based on 1D 11x11. Sadly I can't pack this into 1 byte.
   };
-
-  GameStartedMessage() { type_ = Type::GameStarted; }
 
   uint8_t thisPlayerId;
   // TODO consider doing the whole project without a single vector?
