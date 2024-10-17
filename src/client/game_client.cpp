@@ -1,9 +1,13 @@
 #include "client/game_client.h"
+#include "client/ui/button.h"
 #include "common/defines.h"
 #include "spdlog/spdlog.h"
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Network/Socket.hpp>
 #include <SFML/System/Time.hpp>
+#include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <memory>
 /* -------------------------------------------------------------------------- */
 GameClient::GameClient()
     : Game::Game(),
@@ -14,12 +18,31 @@ GameClient::GameClient()
 void GameClient::run() {
   spdlog::info("Running client.");
 
+  // !TEST CODE BEGIN
+  auto buttonPtr = std::make_unique<Button>(
+      sf::Vector2f{20.0f, 20.f}, sf::Vector2f{160.0f, 90.f}, nullptr);
+  auto& button = *buttonPtr;
+  button.bind_callback([]() { spdlog::info("Hallelujah!"); });
+  // Memory leak, idgaf it's test code
+  sf::Texture* textureNormal = new sf::Texture();
+  textureNormal->loadFromFile("assets/ButtonTest_Normal.png");
+  sf::Texture* textureClicked = new sf::Texture();
+  textureClicked->loadFromFile("assets/ButtonTest_Clicked.png");
+  button.set_style(Button::State::Normal, Button::Style{textureNormal, nullptr})
+      .set_style(Button::State::Clicked,
+                 Button::Style{textureClicked, nullptr});
+  button.set_state(Button::State::Normal);
+  widgets_.emplace_back(std::move(buttonPtr));
+  // !TEST CODE END
+
+  window_.setVisible(true);
+
   float deltaTime{1.0f / 60};
   while (isRunning_) {
     sf::Clock dtClock;
 
     poll_events();
-    update(deltaTime); // TODO Do I even need this?
+    update(deltaTime); // TODO I will need dt for animations probably?
     draw();
 
     deltaTime = dtClock.restart().asSeconds();
@@ -27,16 +50,7 @@ void GameClient::run() {
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::update(float deltaTime) {
-  // TODO Remove this. This should be called in a connect to host screen.
-  if (!network_.connected()) {
-    if (!initialize_network()) {
-      abort();
-    }
-    window_.setVisible(true);
-    window_.setFramerateLimit(60);
-  }
-
-  network_.check_connection();
+  // TODO Update the current scene.
 }
 /* -------------------------------------------------------------------------- */
 void GameClient::abort() { Game::abort(); }
@@ -62,6 +76,22 @@ void GameClient::poll_events() {
       isRunning_ = false;
       break;
     }
+    case sf::Event::MouseButtonPressed: {
+      // TODO Move this code somewhere else. Test code only.
+      for (const auto& widget : widgets_) {
+        widget->handle_mouse_button_pressed(
+            event, sf::Vector2i{event.mouseButton.x, event.mouseButton.y});
+      }
+      break;
+    }
+    case sf::Event::MouseButtonReleased: {
+      // TODO Move this code somewhere else. Test code only.
+      for (const auto& widget : widgets_) {
+        widget->handle_mouse_button_released(
+            event, sf::Vector2i{event.mouseButton.x, event.mouseButton.y});
+      }
+      break;
+    }
     default:
       break;
     }
@@ -70,7 +100,11 @@ void GameClient::poll_events() {
 /* -------------------------------------------------------------------------- */
 void GameClient::draw() {
   window_.clear();
-  // TODO Call draw on all drawable objects.
+
+  for (const std::unique_ptr<Widget>& widget : widgets_) {
+    window_.draw(*widget);
+  }
+
   window_.display();
 }
 /* -------------------------------------------------------------------------- */

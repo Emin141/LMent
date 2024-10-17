@@ -13,7 +13,7 @@ send messages by calls from the server class.
 class ClientNetwork {
 public:
   /* ------------------------------- Functions ------------------------------ */
-  void set_ip_address(const sf::IpAddress &serverAddress);
+  void set_ip_address(const sf::IpAddress& serverAddress);
   void set_port(int serverPort);
   void connect();
   void send_turn_step(/* TODO add turn step message */);
@@ -29,7 +29,6 @@ private:
   uint8_t playerId{};
 
   /* ------------------------------- Functions ------------------------------ */
-  void handle_game_start();
   void reconnect();
 };
 /* -------------------------------------------------------------------------- */

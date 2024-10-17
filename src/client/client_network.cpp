@@ -38,43 +38,13 @@ void ClientNetwork::check_connection() {
   }
 }
 /* -------------------------------------------------------------------------- */
-void ClientNetwork::handle_game_start() {
-  spdlog::info("Waiting for host to start the match.");
-
-  bool receivedGameStarted{false};
-  while (!receivedGameStarted) {
-    sf::Packet packet{};
-    if (socket_.receive(packet) == sf::Socket::Done) {
-      MessageType messageType{};
-      packet >> messageType;
-      if (messageType != MessageType::GameStarted) {
-        spdlog::critical("Message received from server was not GameStarted.");
-        abort();
-      }
-
-      GameStartedMessage message;
-      packet >> message;
-
-      // TODO save this data somewhere later.
-      spdlog::info(
-          "Received GameStarted message as playerId:{}, playerCount:{}.",
-          message.thisPlayerId, message.initialPlayerInfoList.size());
-      playerId = message.thisPlayerId;
-
-      receivedGameStarted = true;
-    }
-
-    check_connection();
-  }
-}
-/* -------------------------------------------------------------------------- */
 void ClientNetwork::reconnect() {
   spdlog::info("Attempting to reconnect to server.");
 
   int attempt = 0;
   while (!connected_ && (attempt < MAX_RECONNECT_ATTEMPTS)) {
     if (socket_.connect(serverAddress_, serverPort_,
-                        sf::Time(sf::seconds(10))) == sf::Socket::Done) {
+                        sf::Time(sf::seconds(5))) == sf::Socket::Done) {
       spdlog::info("Reconnected to server at {}:{}", serverAddress_.toString(),
                    serverPort_);
       connected_ = true;

@@ -10,21 +10,30 @@ set(CMAKE_C_STANDARD 99)
 # Setup include directories
 include_directories(include third_party/include)
 
-# Source files
-file(GLOB_RECURSE COMMON_SOURCES ${CMAKE_SOURCE_DIR}/src/common/*.cpp)
-file(GLOB CLIENT_SOURCES ${CMAKE_SOURCE_DIR}/src/client/*.cpp)
-file(GLOB SERVER_SOURCES ${CMAKE_SOURCE_DIR}/src/server/*.cpp)
-set(CLIENT_MAIN ${CMAKE_SOURCE_DIR}/src/client/main.cpp)
-set(SERVER_MAIN ${CMAKE_SOURCE_DIR}/src/server/main.cpp)
+# Use GLOB_RECURSE to automatically find all common source files
+file(GLOB_RECURSE COMMON_SOURCES
+    ${CMAKE_SOURCE_DIR}/src/common/*.cpp
+)
+
+# Use GLOB to automatically find all client source files (without recursion)
+file(GLOB CLIENT_SOURCES
+    ${CMAKE_SOURCE_DIR}/src/client/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/client/ui/*.cpp  # Recursively include files from ui
+)
+
+# Use GLOB to automatically find all server source files (without recursion)
+file(GLOB SERVER_SOURCES
+    ${CMAKE_SOURCE_DIR}/src/server/*.cpp
+)
 
 # Create client target
-add_executable(Client ${CLIENT_MAIN} ${COMMON_SOURCES} ${CLIENT_SOURCES})
-add_executable(Client_Debug ${CLIENT_MAIN} ${COMMON_SOURCES} ${CLIENT_SOURCES})
+add_executable(Client ${COMMON_SOURCES} ${CLIENT_SOURCES})
+add_executable(Client_Debug ${COMMON_SOURCES} ${CLIENT_SOURCES})
 set_target_properties(Client_Debug PROPERTIES OUTPUT_NAME "Client_Debug")
 
 # Create server target
-add_executable(Server ${SERVER_MAIN} ${COMMON_SOURCES} ${SERVER_SOURCES})
-add_executable(Server_Debug ${SERVER_MAIN} ${COMMON_SOURCES} ${SERVER_SOURCES})
+add_executable(Server ${COMMON_SOURCES} ${SERVER_SOURCES})
+add_executable(Server_Debug ${COMMON_SOURCES} ${SERVER_SOURCES})
 set_target_properties(Server_Debug PROPERTIES OUTPUT_NAME "Server_Debug")
 
 # Set compiler flags
@@ -37,4 +46,3 @@ target_link_libraries(Client sfml-system sfml-window sfml-graphics sfml-network 
 target_link_libraries(Server sfml-system sfml-network)
 target_link_libraries(Client_Debug sfml-system sfml-window sfml-graphics sfml-network sfml-audio dl)
 target_link_libraries(Server_Debug sfml-system sfml-network)
-
