@@ -41,3 +41,5 @@
 *.log
 /log/
 .cache/
+.clang-format
+/assets/test/
