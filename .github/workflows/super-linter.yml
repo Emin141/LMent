@@ -15,15 +15,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run Super Linter
+      - name: Run Super Linter (Auto-format only)
         uses: github/super-linter@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false  # Disable all linting
           RUN_LINTER: false  # Disable linting
           RUN_FORMATTER: true # Enable formatting
           FIX_CLANG_FORMAT: true
           FORMAT_ONLY: true
-          FILTER_REGEX_INCLUDE: "/.*"
-#          FILTER_REGEX_EXCLUDE: '^/(third_party|assets)/.*'
-          CLANG_FORMAT_EXTENSIONS: 'cpp,h,hpp'  # List of extensions to be formatted
+          CLANG_FORMAT_EXTENSIONS: 'cpp,h,hpp'
+          DEFAULT_BRANCH: main
+          CLANGFORMAT_ARGUMENTS: "--style=file --fallback-style=none -i"
           ACTIONS_RUNNER_DEBUG: true
