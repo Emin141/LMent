@@ -21,6 +21,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_LINTER: false  # Disable linting
           RUN_FORMATTER: true # Enable formatting
+          FIX_CLANG_FORMAT: true
           FORMAT_ONLY: true
-          FILTER_DIRS: 'include/,src/,doc/' # Only format these dirs
-          SKIP_DIRS: 'third_party/,assets/' # Skip these dirs
+          FILTER_REGEX_INCLUDE: '^(include|src|doc)/.*' # Include files in these directories
+          FILTER_REGEX_EXCLUDE: '^(third_party|assets)/.*' # Exclude these directories
+
