@@ -8,22 +8,22 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 99) 
 
 # Setup include directories
-include_directories(include third_party/include)
+include_directories(source third_party/include)
 
 # Use GLOB_RECURSE to automatically find all common source files
 file(GLOB_RECURSE COMMON_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/common/*.cpp
+    ${CMAKE_SOURCE_DIR}/source/common/*.cpp
 )
 
 # Use GLOB to automatically find all client source files (without recursion)
 file(GLOB CLIENT_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/client/*.cpp
-    ${CMAKE_SOURCE_DIR}/src/client/ui/*.cpp  # Recursively include files from ui
+    ${CMAKE_SOURCE_DIR}/source/client/*.cpp
+    ${CMAKE_SOURCE_DIR}/source/client/ui/*.cpp  # Recursively include files from ui
 )
 
 # Use GLOB to automatically find all server source files (without recursion)
 file(GLOB SERVER_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/server/*.cpp
+    ${CMAKE_SOURCE_DIR}/source/server/*.cpp
 )
 
 # Create client target
