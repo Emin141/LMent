@@ -15,23 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
       - name: Run Super Linter
         uses: github/super-linter@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUN_LINTER: false
-          RUN_FORMATTER: true
-          LINT_BRANCH: main
+          RUN_LINTER: false  # Disable linting
+          RUN_FORMATTER: true # Enable formatting
           FORMAT_ONLY: true
-          DEFAULT_BRANCH: main
-          LINTER_RULES_PATH: .super-linter.yml
-          LINTER_CONFIG: .cpplint
-          FORMATTER_PREVIEW: true
-          FORMATTER: true
-          FILTER_DIRS: 'include/,src/,doc/'
-          SKIP_DIRS: 'third_party/,assets/'
+          FILTER_DIRS: 'include/,src/,doc/' # Only format these dirs
+          SKIP_DIRS: 'third_party/,assets/' # Skip these dirs
