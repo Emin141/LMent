@@ -23,7 +23,7 @@ jobs:
           RUN_FORMATTER: true # Enable formatting
           FIX_CLANG_FORMAT: true
           FORMAT_ONLY: true
-          FILTER_REGEX_INCLUDE: '^/(source|doc)/.*'
-          FILTER_REGEX_EXCLUDE: '^/(third_party|assets)/.*'
+          FILTER_REGEX_INCLUDE: "/.*"
+#          FILTER_REGEX_EXCLUDE: '^/(third_party|assets)/.*'
           CLANG_FORMAT_EXTENSIONS: 'cpp,h,hpp'  # List of extensions to be formatted
           ACTIONS_RUNNER_DEBUG: true
