@@ -5,8 +5,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
 /* -------------------------------------------------------------------------- */
-Button::
-Button(const sf::Vector2f& position, const sf::Vector2f& size,
+Button::   Button(const sf::Vector2f& position, const sf::Vector2f& size,
                Widget* parentWidget)
     : Widget(parentWidget) {
   set_click_disposition(Widget::ClickDisposition::Clickable);
@@ -14,7 +13,8 @@ Button(const sf::Vector2f& position, const sf::Vector2f& size,
   rectangleShape_.setSize(size);
 }
 /* -------------------------------------------------------------------------- */
-void Button::set_state(State value) {
+void Button::
+set_state(State value) {
   state_ = value;
 
   if (state_ == State::Disabled) {
