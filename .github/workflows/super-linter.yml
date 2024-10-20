@@ -28,3 +28,7 @@ jobs:
           DEFAULT_BRANCH: main
           CLANGFORMAT_ARGUMENTS: "--style=file --fallback-style=none -i"
           ACTIONS_RUNNER_DEBUG: true
+          FILTER_REGEX_INCLUDE: ".*(cpp|h|hpp)$" # Match only C++ files (cpp, h, hpp)
+
+      - name: Display workspace contents for debug
+        run: ls -R
