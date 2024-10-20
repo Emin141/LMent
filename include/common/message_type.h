@@ -11,7 +11,7 @@ enum class MessageType : uint8_t {
   UndoStep
 };
 /* -------------------------------------------------------------------------- */
-inline sf::Packet &operator>>(sf::Packet &packet, MessageType &messageType) {
+inline sf::Packet& operator>>(sf::Packet& packet, MessageType& messageType) {
   uint8_t value;
   packet >> value;
   messageType = static_cast<MessageType>(value);
@@ -19,8 +19,8 @@ inline sf::Packet &operator>>(sf::Packet &packet, MessageType &messageType) {
 }
 /* --------------------------------------------------------------------------
  */
-inline sf::Packet &operator<<(sf::Packet &packet,
-                              const MessageType &messageType) {
+inline sf::Packet& operator<<(sf::Packet& packet,
+                              const MessageType& messageType) {
   return packet << static_cast<uint8_t>(messageType);
 }
 /* -------------------------------------------------------------------------- */

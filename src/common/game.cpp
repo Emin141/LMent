@@ -37,7 +37,7 @@ bool Game::initialize_logging() {
 
     spdlog::info("Logging library successfully initialized");
 
-  } catch (const spdlog::spdlog_ex &ex) {
+  } catch (const spdlog::spdlog_ex& ex) {
     std::fprintf(stderr, "Log initialization failed: %s\n", ex.what());
     std::fflush(stderr);
     return false;

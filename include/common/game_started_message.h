@@ -14,24 +14,24 @@ struct GameStartedMessage {
   std::vector<InitialPlayerInfo> initialPlayerInfoList;
 };
 /* -------------------------------------------------------------------------- */
-inline sf::Packet &
-operator>>(sf::Packet &packet,
-           GameStartedMessage::InitialPlayerInfo &initialPlayerInfo) {
+inline sf::Packet&
+operator>>(sf::Packet& packet,
+           GameStartedMessage::InitialPlayerInfo& initialPlayerInfo) {
   return packet >> initialPlayerInfo.id >> initialPlayerInfo.position;
 }
 /* -------------------------------------------------------------------------- */
-inline sf::Packet &
-operator<<(sf::Packet &packet,
-           const GameStartedMessage::InitialPlayerInfo &initialPlayerInfo) {
+inline sf::Packet&
+operator<<(sf::Packet& packet,
+           const GameStartedMessage::InitialPlayerInfo& initialPlayerInfo) {
   return packet << initialPlayerInfo.id << initialPlayerInfo.position;
 }
 /* -------------------------------------------------------------------------- */
-inline sf::Packet &operator>>(sf::Packet &packet, GameStartedMessage &message) {
+inline sf::Packet& operator>>(sf::Packet& packet, GameStartedMessage& message) {
   return packet >> message.thisPlayerId >> message.initialPlayerInfoList;
 }
 /* -------------------------------------------------------------------------- */
-inline sf::Packet &operator<<(sf::Packet &packet,
-                              const GameStartedMessage &message) {
+inline sf::Packet& operator<<(sf::Packet& packet,
+                              const GameStartedMessage& message) {
   return packet << message.thisPlayerId << message.initialPlayerInfoList;
 }
 /* -------------------------------------------------------------------------- */

@@ -7,7 +7,7 @@
 #include <SFML/System/Sleep.hpp>
 #include <SFML/System/Time.hpp>
 /* -------------------------------------------------------------------------- */
-void ClientNetwork::set_ip_address(const sf::IpAddress &serverAddress) {
+void ClientNetwork::set_ip_address(const sf::IpAddress& serverAddress) {
   serverAddress_ = serverAddress;
 }
 /* -------------------------------------------------------------------------- */

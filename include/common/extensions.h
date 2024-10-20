@@ -3,12 +3,12 @@
 #include <vector>
 /* -------------------------------------------------------------------------- */
 template <typename T>
-sf::Packet &operator>>(sf::Packet &packet, std::vector<T> &vector) {
+sf::Packet& operator>>(sf::Packet& packet, std::vector<T>& vector) {
   sf::Uint32 size;
   packet >> size;
   vector.resize(size);
 
-  for (T &element : vector) {
+  for (T& element : vector) {
     packet >> element;
   }
 
@@ -16,10 +16,10 @@ sf::Packet &operator>>(sf::Packet &packet, std::vector<T> &vector) {
 }
 /* -------------------------------------------------------------------------- */
 template <typename T>
-sf::Packet &operator<<(sf::Packet &packet, const std::vector<T> &vector) {
+sf::Packet& operator<<(sf::Packet& packet, const std::vector<T>& vector) {
   packet << static_cast<sf::Uint32>(vector.size());
 
-  for (const T &element : vector) {
+  for (const T& element : vector) {
     packet << element;
   }
 

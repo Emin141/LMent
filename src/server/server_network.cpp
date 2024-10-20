@@ -54,7 +54,7 @@ void ServerNetwork::listen_for_connections() {
   spdlog::info(
       "Server has accepted sufficient number of players to start the match.");
 
-  for (const auto &[playerId, socket] : sockets_) {
+  for (const auto& [playerId, socket] : sockets_) {
     playerAddresses_[playerId] = socket->getRemoteAddress();
   }
 
@@ -82,7 +82,7 @@ void ServerNetwork::broadcast(MessageType messageType) {
 }
 /* -------------------------------------------------------------------------- */
 void ServerNetwork::broadcast_game_started() {
-  for (const auto &[playerId, socket] : sockets_) {
+  for (const auto& [playerId, socket] : sockets_) {
     sf::Packet sendPacket;
     sendPacket << MessageType::GameStarted;
 

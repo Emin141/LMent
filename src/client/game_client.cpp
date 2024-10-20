@@ -25,9 +25,9 @@ void GameClient::run() {
   button.bind_callback([]() { spdlog::info("Hallelujah!"); });
   // Memory leak, idgaf it's test code
   sf::Texture* textureNormal = new sf::Texture();
-  textureNormal->loadFromFile("assets/ButtonTest_Normal.png");
+  textureNormal->loadFromFile("assets/test/ButtonTest_Normal.png");
   sf::Texture* textureClicked = new sf::Texture();
-  textureClicked->loadFromFile("assets/ButtonTest_Clicked.png");
+  textureClicked->loadFromFile("assets/test/ButtonTest_Clicked.png");
   button.set_style(Button::State::Normal, Button::Style{textureNormal, nullptr})
       .set_style(Button::State::Clicked,
                  Button::Style{textureClicked, nullptr});
