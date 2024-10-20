@@ -1,0 +1,30 @@
+name: Super-Linter
+
+on:
+  pull_request:
+    branches:
+      - "**"
+  push:
+    branches:
+      - "**"
+
+jobs:
+  lint:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run Super-Linter
+        uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: main  # Change to your default branch if different
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_CPP: true
+          VALIDATE_YAML: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_JSON: true
+          FILTER_REGEX_INCLUDE: (src/.*|include/.*|doc/.*)  # Include only specific directories
+          FILTER_REGEX_EXCLUDE: (third_party/.*|assets/.*)  # Exclude certain directories
