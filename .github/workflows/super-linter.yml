@@ -22,7 +22,6 @@ jobs:
           RUN_LINTER: false  # Disable linting
           RUN_FORMATTER: true # Enable formatting
           FIX_CLANG_FORMAT: true
-          FORMAT_ONLY: true
           FILTER_REGEX_INCLUDE: '^(include|src|doc)/.*' # Include files in these directories
           FILTER_REGEX_EXCLUDE: '^(third_party|assets)/.*' # Exclude these directories
 
