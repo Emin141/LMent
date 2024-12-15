@@ -6,22 +6,22 @@ similar.
 The class is abstract so that it can be implemented differently for client and
 server instances.
 */
-/* -------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------------------ */
 #pragma once
-/* -------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------------------ */
 class Game {
-public:
-  // Nothing else should be in the public interface.
-  Game();
-  virtual void run() = 0;
+   public:
+    // Nothing else should be in the public interface.
+    Game();
+    virtual void run() = 0;
 
-protected:
-  /* ------------------------------- Variables ------------------------------ */
-  bool isRunning_{false};
+   protected:
+    /* -------------------------------------------------- Variables ------------------------------------------------- */
+    bool isRunning_{false};
 
-  /* -------------------------------- Functions ----------------------------- */
-  virtual bool initialize_logging();
-  virtual void update(float deltaTime) = 0;
-  virtual void abort(); // Has some default logic.
+    /* -------------------------------------------------- Functions ------------------------------------------------- */
+    virtual bool initialize_logging();
+    virtual void update(float deltaTime) = 0;
+    virtual void abort();  // Has some default logic.
 };
-/* -------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------------------ */
