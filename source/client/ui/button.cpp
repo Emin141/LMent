@@ -52,8 +52,7 @@ void Button::bind_clicked_when_disabled_callback(const std::function<void(void)>
     }
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Button::handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                         const sf::Vector2i& mousePosition) {
+void Button::handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent) {
     if (get_click_disposition() == Widget::ClickDisposition::Unclickable) {
         return;
     }
@@ -63,8 +62,7 @@ void Button::handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mous
     }
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Button::handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                          const sf::Vector2i& mousePosition) {
+void Button::handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent) {
     if (get_click_disposition() == Widget::ClickDisposition::Unclickable) {
         return;  // BUG what if the button becomes unclickable after it was clicked?
     }
@@ -72,6 +70,22 @@ void Button::handle_mouse_button_released(const sf::Event::MouseButtonEvent& mou
     if (mouseClickEvent.button == sf::Mouse::Left) {
         on_mouse_button_released(mouseClickEvent);
     }
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+void Button::handle_mouse_hover_start() {
+    if (get_click_disposition() == Widget::ClickDisposition::Unclickable) {
+        return;
+    }
+
+    on_mouse_hover_start();
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+void Button::handle_mouse_hover_end() {
+    if (get_click_disposition() == Widget::ClickDisposition::Unclickable) {
+        return;
+    }
+
+    on_mouse_hover_end();
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void Button::update(float deltaTime) {}
@@ -102,4 +116,8 @@ void Button::on_mouse_button_released(const sf::Event::MouseButtonEvent& mouseCl
         set_state(State::Normal);
     }
 }
+/* ------------------------------------------------------------------------------------------------------------------ */
+void Button::on_mouse_hover_start() {}
+/* ------------------------------------------------------------------------------------------------------------------ */
+void Button::on_mouse_hover_end() {}
 /* ------------------------------------------------------------------------------------------------------------------ */

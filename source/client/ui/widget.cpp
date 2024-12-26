@@ -78,11 +78,9 @@ Widget::ClickDisposition Widget::get_click_disposition() const {
     return clickDisposition_;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                         const sf::Vector2i& mousePosition) {}
+void Widget::handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent) {}
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                          const sf::Vector2i& mousePosition) {}
+void Widget::handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent) {}
 /* ------------------------------------------------------------------------------------------------------------------ */
 bool Widget::is_mouse_inside_boundaries(const sf::Vector2i& mousePosition) const {
     const auto& [anchorX, anchorY] = get_position();

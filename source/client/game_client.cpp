@@ -80,16 +80,14 @@ void GameClient::poll_events() {
             case sf::Event::MouseButtonPressed: {
                 // TODO Move this code somewhere else. Test code only.
                 for (const auto& widget : widgets_) {
-                    widget->handle_mouse_button_pressed(event.mouseButton,
-                                                        sf::Vector2i{event.mouseButton.x, event.mouseButton.y});
+                    widget->handle_mouse_button_pressed(event.mouseButton);
                 }
                 break;
             }
             case sf::Event::MouseButtonReleased: {
                 // TODO Move this code somewhere else. Test code only.
                 for (const auto& widget : widgets_) {
-                    widget->handle_mouse_button_released(event.mouseButton,
-                                                         sf::Vector2i{event.mouseButton.x, event.mouseButton.y});
+                    widget->handle_mouse_button_released(event.mouseButton);
                 }
                 break;
             }

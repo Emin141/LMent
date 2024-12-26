@@ -39,10 +39,10 @@ class Button : public Widget {
     void bind_clicked_callback(const std::function<void(void)>& callback);
     void bind_clicked_when_disabled_callback(const std::function<void(void)>& callback);
 
-    void handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                     const sf::Vector2i& mousePosition) override;
-    void handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                      const sf::Vector2i& mousePosition) override;
+    void handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent) override;
+    void handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent) override;
+    void handle_mouse_hover_start() override;
+    void handle_mouse_hover_end() override;
     void update(float deltaTime) override;
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -50,6 +50,8 @@ class Button : public Widget {
     /* -------------------------------------------------- Functions ------------------------------------------------- */
     void on_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent);
     void on_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent);
+    void on_mouse_hover_start();
+    void on_mouse_hover_end();
 
     /* -------------------------------------------------- Variables ------------------------------------------------- */
     State state_{State::Normal};
@@ -57,6 +59,7 @@ class Button : public Widget {
         {State::Normal, Style{}}, {State::Hovered, Style{}}, {State::Clicked, Style{}}, {State::Disabled, Style{}}};
     sf::Sound stateChangeSound_;
     sigslot::signal<> clicked_;
+    sigslot::signal<> hovered_;
     sigslot::signal<> clickedWhenDisabled_;
     sf::RectangleShape rectangleShape_;
 };

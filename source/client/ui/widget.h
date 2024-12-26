@@ -85,13 +85,13 @@ class Widget : public sf::Drawable {
     void set_padding(Padding value);
     Padding get_padding() const;
 
-    // Clicking
+    // Mouse interaction
     void set_click_disposition(ClickDisposition value);
     ClickDisposition get_click_disposition() const;
-    virtual void handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                             const sf::Vector2i& mousePosition);
-    virtual void handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent,
-                                              const sf::Vector2i& mousePosition);
+    virtual void handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& mouseClickEvent);
+    virtual void handle_mouse_button_released(const sf::Event::MouseButtonEvent& mouseClickEvent);
+    virtual void handle_mouse_hover_start();
+    virtual void handle_mouse_hover_end();
     virtual bool is_mouse_inside_boundaries(const sf::Vector2i& mousePosition) const;
 
     // Children
