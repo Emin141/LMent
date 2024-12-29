@@ -2,8 +2,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ------------------------------------------------------------------------------------------------------------------ */
 ImageWidget::ImageWidget(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Texture* texture,
-                         const sf::IntRect& textureRect, Widget* parentWidget)
-    : Widget(parentWidget) {
+                         const sf::IntRect& textureRect) {
   set_position(position);
   set_size(size);
   rectangleShape_.setTexture(texture);

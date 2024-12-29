@@ -1,7 +1,7 @@
 #include "client/ui/user_interface.h"
 #include "client/ui/widget.h"
 /* ------------------------------------------------------------------------------------------------------------------ */
-UserInterface::UserInterface(const sf::Vector2u& size) : Widget(nullptr) {
+UserInterface::UserInterface(const sf::Vector2u& size) {
   enabled_ = true;
   horizontalAlignment_ = HorizontalAlignment::Stretch;
   verticalAlignment_ = VerticalAlignment::Stretch;

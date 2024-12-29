@@ -55,18 +55,18 @@ class Widget : public sf::Drawable {
   };
 
   /* -------------------------------------------------- Functions ------------------------------------------------- */
-  Widget() = delete;
+  Widget() = default;
   Widget(const Widget&) = delete;
   Widget& operator=(const Widget&) = delete;
   Widget(Widget&&) = delete;
   Widget& operator=(Widget&&) = delete;
-  Widget(Widget* parentWidget);
 
   // Focus and ability
   virtual void enable();
   virtual void disable();
   bool enabled() const;
   bool disabled() const;
+  void set_parent_widget(Widget* parentWidget);
 
   // TODO Do I even need these?
   virtual void set_position(const sf::Vector2f& value);

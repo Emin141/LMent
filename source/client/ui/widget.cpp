@@ -4,8 +4,6 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
 /* ------------------------------------------------------------------------------------------------------------------ */
-Widget::Widget(Widget* parentWidget) : parentWidget_(parentWidget) {}
-/* ------------------------------------------------------------------------------------------------------------------ */
 void Widget::enable() {
   enabled_ = true;
 }
@@ -20,6 +18,10 @@ bool Widget::enabled() const {
 /* ------------------------------------------------------------------------------------------------------------------ */
 bool Widget::disabled() const {
   return !enabled_;
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+void Widget::set_parent_widget(Widget* parentWidget) {
+  parentWidget_ = parentWidget;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void Widget::set_position(const sf::Vector2f& value) {}
@@ -83,6 +85,7 @@ bool Widget::contains_point(const sf::Vector2i& mousePosition) const {
 /* ------------------------------------------------------------------------------------------------------------------ */
 Widget* Widget::add_child_widget(std::unique_ptr<Widget> childWidget) {
   childWidgets_.push_back(std::move(childWidget));
+  childWidgets_.back()->set_parent_widget(this);
   return childWidgets_.back().get();
 }
 /* ------------------------------------------------------------------------------------------------------------------ */

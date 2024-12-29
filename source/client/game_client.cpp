@@ -30,12 +30,16 @@ void GameClient::run() {
   backgroundTexture->loadFromFile("assets/background.png");
   auto backgroundPtr =
       std::make_unique<ImageWidget>(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(window_.getSize()), backgroundTexture,
-                                    sf::IntRect(0, 0, window_.getSize().x, window_.getSize().y), nullptr);
+                                    sf::IntRect(0, 0, window_.getSize().x, window_.getSize().y));
 
   sf::Texture* gameTexture = new sf::Texture();
   gameTexture->loadFromFile("assets/game_texture.png");
+
+  sf::Font* titleFont = new sf::Font();
+  titleFont->loadFromFile("assets/fonts/NewRocker.ttf");
+
   auto joinGameButtonPtr = std::make_unique<Button>(sf::Vector2f{window_.getSize().x / 2.0f - 160.0f, 450.0f},
-                                                    sf::Vector2f{320.0f, 100.f}, gameTexture, nullptr);
+                                                    sf::Vector2f{320.0f, 100.f}, gameTexture, "JOIN GAME", titleFont);
   auto& joinGameButton = *joinGameButtonPtr;
   joinGameButton.bind_clicked_callback([]() { spdlog::info("Join game clicked!"); });
   joinGameButton.set_style(Button::State::Normal, Button::Style{sf::IntRect{0, 0, 320, 100}, nullptr})
@@ -44,7 +48,7 @@ void GameClient::run() {
   joinGameButton.set_state(Button::State::Normal);
 
   auto hostGameButtonPtr = std::make_unique<Button>(sf::Vector2f{window_.getSize().x / 2.0f - 160.0f, 600.0f},
-                                                    sf::Vector2f{320.0f, 100.f}, gameTexture, nullptr);
+                                                    sf::Vector2f{320.0f, 100.f}, gameTexture, "HOST GAME", titleFont);
   auto& hostGameButton = *hostGameButtonPtr;
   hostGameButton.bind_clicked_callback([]() { spdlog::info("Host game clicked!"); });
   hostGameButton.set_style(Button::State::Normal, Button::Style{sf::IntRect{0, 0, 320, 100}, nullptr})
@@ -53,7 +57,7 @@ void GameClient::run() {
   hostGameButton.set_state(Button::State::Normal);
 
   auto optionsButtonPtr = std::make_unique<Button>(sf::Vector2f{window_.getSize().x / 2.0f - 160.0f, 750.0f},
-                                                   sf::Vector2f{320.0f, 100.f}, gameTexture, nullptr);
+                                                   sf::Vector2f{320.0f, 100.f}, gameTexture, "OPTIONS", titleFont);
   auto& optionsButton = *optionsButtonPtr;
   optionsButton.bind_clicked_callback([]() { spdlog::info("Options clicked!"); });
   optionsButton.set_style(Button::State::Normal, Button::Style{sf::IntRect{0, 0, 320, 100}, nullptr})
@@ -62,7 +66,7 @@ void GameClient::run() {
   optionsButton.set_state(Button::State::Normal);
 
   auto exitGameButtonPtr = std::make_unique<Button>(sf::Vector2f{window_.getSize().x / 2.0f - 160.0f, 900.0f},
-                                                    sf::Vector2f{320.0f, 100.f}, gameTexture, nullptr);
+                                                    sf::Vector2f{320.0f, 100.f}, gameTexture, "EXIT GAME", titleFont);
   auto& exitGameButton = *exitGameButtonPtr;
   exitGameButton.bind_clicked_callback([this]() { isRunning_ = false; });
   exitGameButton.set_style(Button::State::Normal, Button::Style{sf::IntRect{0, 0, 320, 100}, nullptr})

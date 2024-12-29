@@ -9,7 +9,7 @@ Used to display backgrounds mostly.
 class ImageWidget : public Widget {
  public:
   ImageWidget(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Texture* texture,
-              const sf::IntRect& textureRect, Widget* parentWidget);
+              const sf::IntRect& textureRect);
 
   void set_position(const sf::Vector2f& value) override;
   const sf::Vector2f& get_position() const override;

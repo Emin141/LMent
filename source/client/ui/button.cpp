@@ -2,14 +2,35 @@
 #include "client/ui/widget.h"
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 /* ------------------------------------------------------------------------------------------------------------------ */
-Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Texture* texture, Widget* parentWidget)
-    : Widget(parentWidget) {
+Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Texture* texture,
+               const std::string& text, const sf::Font* font) {
+  const unsigned int fontSize{48};
+
+  // General
   set_click_disposition(Widget::ClickDisposition::Clickable);
   set_position(position);
   set_size(size);
+
+  // Background sprite
   rectangleShape_.setTexture(texture);
+
+  // Text
+  text_.setString(text);
+  text_.setFont(*font);
+  text_.setFillColor(sf::Color(0xFFAA00FF));
+  text_.setCharacterSize(fontSize);
+
+  sf::Vector2f textOrigin;
+  {
+    textOrigin.x = text_.getGlobalBounds().width / 2.0f + text_.getLocalBounds().left;
+    sf::Text hackText("I", *font, fontSize);  // HACK This will force vertical center. I'm not fixing this.
+    textOrigin.y = hackText.getGlobalBounds().height / 2.0f + text_.getLocalBounds().top;
+  }
+  text_.setOrigin(textOrigin);
+  text_.setPosition(rectangleShape_.getPosition() + (rectangleShape_.getSize() / 2.f));
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void Button::enable() {
@@ -126,6 +147,7 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   Widget::draw(target, states);
 
   target.draw(rectangleShape_, states);
+  target.draw(text_, states);
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void Button::on_mouse_button_pressed(sf::Mouse::Button mouseButton) {

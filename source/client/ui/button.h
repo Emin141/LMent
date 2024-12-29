@@ -8,6 +8,7 @@ four states: Normal, Hovered, Clicked, and Disabled.
 #include "sigslot/signal.hpp"
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <functional>
@@ -29,7 +30,8 @@ class Button : public Widget {
   Button& operator=(const Button&) = delete;
   Button(Button&&) = delete;
   Button& operator=(Button&&) = delete;
-  Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Texture* texture, Widget* parentWidget);
+  Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Texture* texture, const std::string& text,
+         const sf::Font* font);
 
   void enable() override;
   void disable() override;
@@ -64,6 +66,7 @@ class Button : public Widget {
 
   /* -------------------------------------------------- Variables ------------------------------------------------- */
   const sf::Texture* texture;
+  sf::Text text_;
   State state_{State::Normal};
   std::unordered_map<State, Style> styles_{
       {State::Normal, Style{}}, {State::Hovered, Style{}}, {State::Clicked, Style{}}, {State::Disabled, Style{}}};
