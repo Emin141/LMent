@@ -37,13 +37,13 @@ if(WIN32)
     add_executable(Server ${COMMON_SOURCES} ${SERVER_SOURCES})
 
     # Link SFML libraries
-    target_link_libraries(Client sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
+    target_link_libraries(Client sfml-system sfml-window sfml-graphics sfml-network sfml-audio lz4)
     target_link_libraries(Server sfml-system sfml-network)
 
     # Add Debug Builds
     add_executable(Client_Debug ${COMMON_SOURCES} ${CLIENT_SOURCES})
     add_executable(Server_Debug ${COMMON_SOURCES} ${SERVER_SOURCES})
-    target_link_libraries(Client_Debug sfml-system sfml-window sfml-graphics sfml-network sfml-audio dl)
+    target_link_libraries(Client_Debug sfml-system sfml-window sfml-graphics sfml-network sfml-audio dl lz4)
     target_link_libraries(Server_Debug sfml-system sfml-network)
     set_target_properties(Client_Debug PROPERTIES OUTPUT_NAME "Client_Debug")
     set_target_properties(Server_Debug PROPERTIES OUTPUT_NAME "Server_Debug")
@@ -60,13 +60,13 @@ else()
     add_executable(Server ${COMMON_SOURCES} ${SERVER_SOURCES})
 
     # Link SFML libraries
-    target_link_libraries(Client sfml-system sfml-window sfml-graphics sfml-network sfml-audio dl)
+    target_link_libraries(Client sfml-system sfml-window sfml-graphics sfml-network sfml-audio dl lz4)
     target_link_libraries(Server sfml-system sfml-network)
 
     # Add Debug Builds
     add_executable(Client_Debug ${COMMON_SOURCES} ${CLIENT_SOURCES})
     add_executable(Server_Debug ${COMMON_SOURCES} ${SERVER_SOURCES})
-    target_link_libraries(Client_Debug sfml-system sfml-window sfml-graphics sfml-network sfml-audio dl)
+    target_link_libraries(Client_Debug sfml-system sfml-window sfml-graphics sfml-network sfml-audio dl lz4)
     target_link_libraries(Server_Debug sfml-system sfml-network)
     set_target_properties(Client_Debug PROPERTIES OUTPUT_NAME "Client_Debug")
     set_target_properties(Server_Debug PROPERTIES OUTPUT_NAME "Server_Debug")

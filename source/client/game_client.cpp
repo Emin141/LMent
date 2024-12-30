@@ -13,7 +13,10 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowStyle.hpp>
+#include <cstddef>
+#include <limits>
 #include <memory>
+#include <lz4.h>
 /* ------------------------------------------------------------------------------------------------------------------ */
 GameClient::GameClient()
     : Game::Game(),
@@ -34,6 +37,18 @@ void GameClient::run() {
 
   sf::Texture* gameTexture = new sf::Texture();
   gameTexture->loadFromFile("assets/game_texture.png");
+
+  {
+    const char* src{"AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDDDDDDDDDDEEEEEEEEEE"};
+    char compressed[128];
+    memset(compressed, 0, sizeof(compressed));
+    int compressedSize = LZ4_compress_fast(src, compressed, strlen(src), sizeof(compressed), 255);
+    spdlog::info("Compressed: {}", compressed);
+
+    char decompressed[128];
+    LZ4_decompress_safe(compressed, decompressed, compressedSize, sizeof(decompressed));
+    spdlog::info("Decompressed: {}", decompressed);
+  }
 
   sf::Font* titleFont = new sf::Font();
   titleFont->loadFromFile("assets/fonts/NewRocker.ttf");
