@@ -1,0 +1,64 @@
+{
+    "button_style": {
+        "size_x": 320.0,
+        "size_y": 100.0,
+        "texture": "assets/textures/game_texture.png",
+        "font": "Decorated",
+        "states": [
+            {
+                "state": "Normal",
+                "sprite_x": 0,
+                "sprite_y": 0,
+                "sprite_w": 320,
+                "sprite_h": 100,
+                "sound": null
+            },
+            {
+                "state": "Hovered",
+                "sprite_x": 0,
+                "sprite_y": 100,
+                "sprite_w": 320,
+                "sprite_h": 100,
+                "sound": null
+            },
+            {
+                "state": "Clicked",
+                "sprite_x": 0,
+                "sprite_y": 200,
+                "sprite_w": 320,
+                "sprite_h": 100,
+                "sound": null
+            }
+        ]
+    },
+    "children" : [
+        {
+            "name" : "Background",
+            "resource" : "assets/textures/background.png"
+        },
+        {
+            "name" : "Join button",
+            "position_x" : 800.0,
+            "position_y" : 450.0,
+            "text" : "JOIN"
+        },
+        {
+            "name" : "Host button",
+            "position_x" : 800.0,
+            "position_y" : 600.0,
+            "text" : "HOST"
+        },
+        {
+            "name" : "Settings button",
+            "position_x" : 800.0,
+            "position_y" : 750.0,
+            "text" : "SETTINGS"
+        },
+        {
+            "name" : "Exit button",
+            "position_x" : 800.0,
+            "position_y" : 900.0,
+            "text" : "EXIT"
+        }
+    ]
+}

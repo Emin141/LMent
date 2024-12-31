@@ -1,9 +1,12 @@
 #include "client/ui/widgets/user_interface.h"
 #include "client/ui/components/widget.h"
 /* ------------------------------------------------------------------------------------------------------------------ */
-UserInterface::UserInterface(const sf::Vector2u& size) {
-  enabled_ = true;
+UserInterface::UserInterface(const sf::Vector2u& windowSize) : mainMenu_(windowSize) {
   clickDisposition_ = ClickDisposition::ChildrenClickable;
+
+  childWidgets_.reserve(1);  // TODO Update this when new screens are added.
+
+  activeScreen_ = &mainMenu_;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void UserInterface::handle_input(const sf::Event& inputEvent) {
@@ -71,14 +74,14 @@ void UserInterface::handle_input(const sf::Event& inputEvent) {
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void UserInterface::update(float deltaTime) {
-  for (const auto& childWidget : childWidgets_) {
-    childWidget->update(deltaTime);
+  if (activeScreen_ != nullptr) {
+    activeScreen_->update(deltaTime);
   }
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void UserInterface::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  for (const auto& childWidget : childWidgets_) {
-    childWidget->draw(target, states);
+  if (activeScreen_ != nullptr) {
+    activeScreen_->draw(target, states);
   }
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
