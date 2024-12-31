@@ -26,34 +26,6 @@ class Widget : public sf::Drawable {
   /* ---------------------------------------------------- Types --------------------------------------------------- */
   enum class ClickDisposition : uint8_t { Unclickable, ChildrenClickable, Clickable };
 
-  enum class HorizontalAlignment : uint8_t { Free, Left, Right, Center, Stretch };
-
-  enum class VerticalAlignment : uint8_t { Free, Top, Right, Center, Stretch };
-
-  struct Padding {
-    float top{0.0f};
-    float left{0.0f};
-    float bottom{0.0f};
-    float right{0.0f};
-
-    Padding& set_top(float value) {
-      top = value;
-      return *this;
-    }
-    Padding& set_left(float value) {
-      left = value;
-      return *this;
-    }
-    Padding& set_bottom(float value) {
-      bottom = value;
-      return *this;
-    }
-    Padding& set_right(float value) {
-      right = value;
-      return *this;
-    }
-  };
-
   /* -------------------------------------------------- Functions ------------------------------------------------- */
   Widget() = default;
   Widget(const Widget&) = delete;
@@ -73,14 +45,6 @@ class Widget : public sf::Drawable {
   virtual const sf::Vector2f& get_position() const;
   virtual void set_size(const sf::Vector2f& value);
   virtual const sf::Vector2f& get_size() const;
-
-  void set_alignment(HorizontalAlignment value);
-  void set_alignment(VerticalAlignment value);
-  void set_alignment(HorizontalAlignment haValue, VerticalAlignment vaValue);
-  std::pair<HorizontalAlignment, VerticalAlignment> get_alignment() const;
-
-  void set_padding(Padding value);
-  Padding get_padding() const;
 
   // Mouse interaction
   void set_click_disposition(ClickDisposition value);
@@ -108,10 +72,6 @@ class Widget : public sf::Drawable {
   Widget* parentWidget_{nullptr};
 
   bool enabled_{true};
-
-  HorizontalAlignment horizontalAlignment_;
-  VerticalAlignment verticalAlignment_;
-  Padding padding_;
 
   ClickDisposition clickDisposition_{ClickDisposition::Unclickable};
 

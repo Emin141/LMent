@@ -19,7 +19,8 @@ file(GLOB_RECURSE COMMON_SOURCES
 # Gather client source files
 file(GLOB CLIENT_SOURCES
     ${CMAKE_SOURCE_DIR}/source/client/*.cpp
-    ${CMAKE_SOURCE_DIR}/source/client/ui/*.cpp
+    ${CMAKE_SOURCE_DIR}/source/client/ui/components/*
+    ${CMAKE_SOURCE_DIR}/source/client/ui/widgets/*
 )
 
 # Gather server source files

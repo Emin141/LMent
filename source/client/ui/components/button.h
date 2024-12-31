@@ -4,7 +4,7 @@ four states: Normal, Hovered, Clicked, and Disabled.
 */
 /* ------------------------------------------------------------------------------------------------------------------ */
 #pragma once
-#include "client/ui/widget.h"
+#include "client/ui/components/widget.h"
 #include "sigslot/signal.hpp"
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>

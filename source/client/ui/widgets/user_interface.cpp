@@ -1,11 +1,8 @@
-#include "client/ui/user_interface.h"
-#include "client/ui/widget.h"
+#include "client/ui/widgets/user_interface.h"
+#include "client/ui/components/widget.h"
 /* ------------------------------------------------------------------------------------------------------------------ */
 UserInterface::UserInterface(const sf::Vector2u& size) {
   enabled_ = true;
-  horizontalAlignment_ = HorizontalAlignment::Stretch;
-  verticalAlignment_ = VerticalAlignment::Stretch;
-  padding_ = Padding{};
   clickDisposition_ = ClickDisposition::ChildrenClickable;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */

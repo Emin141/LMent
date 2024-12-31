@@ -1,7 +1,7 @@
 #include "client/game_client.h"
-#include "client/ui/button.h"
-#include "client/ui/user_interface.h"
-#include "client/ui/image_widget.h"
+#include "client/ui/components/button.h"
+#include "client/ui/widgets/user_interface.h"
+#include "client/ui/components/image_widget.h"
 #include "common/defines.h"
 #include "spdlog/spdlog.h"
 #include <SFML/Graphics/Rect.hpp>
@@ -13,8 +13,6 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowStyle.hpp>
-#include <cstddef>
-#include <limits>
 #include <memory>
 #include <lz4.h>
 /* ------------------------------------------------------------------------------------------------------------------ */
@@ -39,15 +37,42 @@ void GameClient::run() {
   gameTexture->loadFromFile("assets/game_texture.png");
 
   {
-    const char* src{"AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDDDDDDDDDDEEEEEEEEEE"};
-    char compressed[128];
-    memset(compressed, 0, sizeof(compressed));
-    int compressedSize = LZ4_compress_fast(src, compressed, strlen(src), sizeof(compressed), 255);
-    spdlog::info("Compressed: {}", compressed);
+    const char* src =
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of "
+        "classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a "
+        "Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin "
+        "words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in "
+        "classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections "
+        "1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by "
+        "Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during "
+        "the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a "
+        "line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced "
+        "below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" "
+        "by Cicero are also reproduced in their exact original form, accompanied by English versions "
+        "from the 1914 translation by H. Rackham.";
 
-    char decompressed[128];
-    LZ4_decompress_safe(compressed, decompressed, compressedSize, sizeof(decompressed));
-    spdlog::info("Decompressed: {}", decompressed);
+    const int srcSize = strlen(src);
+
+    // Dynamically allocate buffers to handle large data
+    std::vector<char> compressed;
+    compressed.reserve(LZ4_compressBound(srcSize));
+
+    std::vector<char> decompressed;
+    decompressed.reserve(srcSize);
+
+    // Compress
+    int compressedSize = LZ4_compress_fast(src, compressed.data(), srcSize, LZ4_compressBound(srcSize), 1);
+    if (compressedSize <= 0) {
+      spdlog::error("Compression failed!");
+    }
+    spdlog::info("Compression successful, decompressed size: {}, compressed size: {}", srcSize, compressedSize);
+
+    // Decompress
+    int decompressedSize = LZ4_decompress_safe(compressed.data(), decompressed.data(), compressedSize, srcSize);
+    if (decompressedSize < 0) {
+      spdlog::error("Decompression failed!");
+    }
+    spdlog::info("Decompression successful: {}", decompressed.data());
   }
 
   sf::Font* titleFont = new sf::Font();
@@ -109,7 +134,8 @@ void GameClient::run() {
     deltaTime = dtClock.restart().asSeconds();
   }
 }
-/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------
+ */
 void GameClient::update(float deltaTime) {
   if (isRunning_) {
     // TODO Update the current scene.
@@ -117,11 +143,13 @@ void GameClient::update(float deltaTime) {
     // TODO if isRunning is false, that means we have to save the game (if there is anything to save).
   }
 }
-/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------
+ */
 void GameClient::abort() {
   Game::abort();
 }
-/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------
+ */
 bool GameClient::initialize_network() {
   // TODO temporary, the port and player number should be specified in the GUI
   spdlog::info("Initializing network.");
@@ -133,7 +161,8 @@ bool GameClient::initialize_network() {
 
   return true;
 }
-/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------
+ */
 void GameClient::poll_events() {
   sf::Event event;
   while (window_.pollEvent(event)) {
@@ -155,11 +184,13 @@ void GameClient::poll_events() {
     }
   }
 }
-/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------
+ */
 void GameClient::draw() {
   window_.clear();
   window_.draw(userInterface_);
   // window.draw(gameObjects_); ...
   window_.display();
 }
-/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------
+ */

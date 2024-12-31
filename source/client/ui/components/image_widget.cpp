@@ -1,4 +1,4 @@
-#include "client/ui/image_widget.h"
+#include "client/ui/components/image_widget.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ------------------------------------------------------------------------------------------------------------------ */
 ImageWidget::ImageWidget(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Texture* texture,

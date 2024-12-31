@@ -4,7 +4,7 @@ Used to display backgrounds mostly.
 /* ------------------------------------------------------------------------------------------------------------------ */
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include "client/ui/widget.h"
+#include "client/ui/components/widget.h"
 /* ------------------------------------------------------------------------------------------------------------------ */
 class ImageWidget : public Widget {
  public:

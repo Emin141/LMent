@@ -1,4 +1,4 @@
-#include "client/ui/widget.h"
+#include "client/ui/components/widget.h"
 #include "common/misc_util.h"
 #include "spdlog/spdlog.h"
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -36,31 +36,6 @@ void Widget::set_size(const sf::Vector2f& value) {}
 const sf::Vector2f& Widget::get_size() const {
   static const sf::Vector2f dummy{};
   return dummy;
-}
-/* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::set_alignment(HorizontalAlignment value) {
-  horizontalAlignment_ = value;
-}
-/* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::set_alignment(VerticalAlignment value) {
-  verticalAlignment_ = value;
-}
-/* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::set_alignment(HorizontalAlignment haValue, VerticalAlignment vaValue) {
-  horizontalAlignment_ = haValue;
-  verticalAlignment_ = vaValue;
-}
-/* ------------------------------------------------------------------------------------------------------------------ */
-std::pair<Widget::HorizontalAlignment, Widget::VerticalAlignment> Widget::get_alignment() const {
-  return {horizontalAlignment_, verticalAlignment_};
-}
-/* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::set_padding(Widget::Padding value) {
-  padding_ = value;
-}
-/* ------------------------------------------------------------------------------------------------------------------ */
-Widget::Padding Widget::get_padding() const {
-  return padding_;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void Widget::set_click_disposition(ClickDisposition value) {

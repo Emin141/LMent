@@ -6,7 +6,7 @@ related stuff from the game client without knowing directly what the internal st
 #pragma once
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Event.hpp>
-#include "client/ui/widget.h"
+#include "client/ui/components/widget.h"
 /* ------------------------------------------------------------------------------------------------------------------ */
 class UserInterface : public Widget {
  public:

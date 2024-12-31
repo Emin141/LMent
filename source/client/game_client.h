@@ -6,7 +6,7 @@ rendering, and such.
 /* ------------------------------------------------------------------------------------------------------------------ */
 #pragma once
 #include "client/client_network.h"
-#include "client/ui/user_interface.h"
+#include "client/ui/widgets/user_interface.h"
 #include "common/game.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>

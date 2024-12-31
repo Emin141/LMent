@@ -1,5 +1,5 @@
-#include "client/ui/button.h"
-#include "client/ui/widget.h"
+#include "client/ui/components/button.h"
+#include "client/ui/components/widget.h"
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
