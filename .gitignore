@@ -30,16 +30,19 @@
 *.exe
 *.out
 *.app
-/build/
+
+# Build files, scripts, and logs
+build/
 *.o
 *.exe
 *.sln
 *.vcxproj
 *.user
 .vscode/
+
 *.sh
 *.log
-/log/
+logs/
 .cache/
-.clang-format
-/assets/test/
+assets/test/
+*.data

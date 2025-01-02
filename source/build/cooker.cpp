@@ -8,13 +8,21 @@ test/ subdirectory. How it works is described in the code.
 #include <cstring>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <string>
 #include <vector>
 /* ------------------------------------------------------------------------------------------------------------------ */
 namespace fs = std::filesystem;
 /* ------------------------------------------------------------------------------------------------------------------ */
-std::vector<fs::path> gatherFilePaths() {
+struct Archive {
+  char header[32];
+  std::vector<std::string> paths;
+  std::vector<uint64_t> positions;
+  std::vector<uint64_t> compressedSizes;
+  std::vector<uint64_t> decompressedSizes;
+  std::vector<char*> compressedDatas;
+};
+/* ------------------------------------------------------------------------------------------------------------------ */
+std::vector<fs::path> gather_asset_paths() {
   std::vector<fs::path> files;
 
   try {
@@ -30,59 +38,88 @@ std::vector<fs::path> gatherFilePaths() {
       }
     }
   } catch (const fs::filesystem_error& e) {
-    std::cerr << "Filesystem error: " << e.what() << std::endl;
+    std::fprintf(stderr, "Filesystem error: %s\n", e.what());
   }
 
   return files;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
-int main() {
-  std::vector<fs::path> filePaths = gatherFilePaths();
+void dump_to_disk(Archive* archive) {
+  std::ofstream fileHandle("assets.data", std::ios::out | std::ios::binary);
+  if (!fileHandle.is_open()) {
+    std::fprintf(stderr, "Could not open assets.dat for archive dump.");
+    std::exit(1);
+  }
 
-  for (const auto& filePath : filePaths) {
-    std::ifstream fileHandle(filePath.string(), std::ios::binary | std::ios::ate);
-    if (!fileHandle.is_open()) {
-      std::cerr << "Failed to open file " << filePath.string() << "\n";
-      return 1;
+  fileHandle << archive->header << "\n";
+  for (int i = 0; i < archive->paths.size(); ++i) {
+    fileHandle << archive->paths[i] << " " << archive->positions[i] << " " << archive->compressedSizes[i] << " "
+               << archive->decompressedSizes[i] << "\n";
+  }
+  for (const auto& compressedData : archive->compressedDatas) {
+    fileHandle << compressedData;
+    delete[] compressedData;
+  }
+
+  fileHandle.close();
+  std::printf("Asset archive created.\n");
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+Archive create_archive(const std::vector<fs::path>& assetPaths) {
+  Archive archive;
+  strcpy(archive.header, "LMent data");
+  archive.paths.reserve(assetPaths.size());
+  archive.positions.reserve(assetPaths.size());
+  archive.compressedSizes.reserve(assetPaths.size());
+  archive.decompressedSizes.reserve(assetPaths.size());
+  archive.compressedDatas.reserve(assetPaths.size());
+
+  uint64_t archivedDataPosition{0};
+
+  for (const auto& assetPath : assetPaths) {
+    std::ifstream assetHandle(assetPath.string(), std::ios::binary | std::ios::ate);
+    if (!assetHandle.is_open()) {
+      std::fprintf(stderr, "Failed to open file: %s\n", assetPath.string().c_str());
+      std::exit(1);
     }
 
-    int fileSize = fileHandle.tellg();
-    fileHandle.seekg(0, std::ios::beg);
+    const int fileSize = assetHandle.tellg();
+    assetHandle.seekg(0, std::ios::beg);
 
     std::vector<char> buffer(fileSize);
-    fileHandle.read(buffer.data(), fileSize);
-    fileHandle.close();
+    assetHandle.read(buffer.data(), fileSize);
+    assetHandle.close();
 
-    // Dynamically allocate buffers to handle large data
+    // Potentially very large files, so dynamic allocation is required.
     char* compressed = new char[LZ4_compressBound(fileSize)];
     memset(compressed, 0, LZ4_compressBound(fileSize));
 
-    char* decompressed = new char[fileSize + 1];  // +1 for null terminator
-    memset(decompressed, 0, fileSize + 1);
-
     // Compress
-    int compressedSize = LZ4_compress_fast(buffer.data(), compressed, fileSize, LZ4_compressBound(fileSize), 1);
+    const int compressedSize = LZ4_compress_fast(buffer.data(), compressed, fileSize, LZ4_compressBound(fileSize), 1);
     if (compressedSize <= 0) {
-      std::cerr << "Compression failed!\n";
+      std::fprintf(stderr, "Compression of file \"%s\" failed.\n", assetPath.string().c_str());
       delete[] compressed;
-      delete[] decompressed;
-      return 1;
+      std::exit(1);
     }
-    std::printf("Compression successful, before/after: %d/%d\n", fileSize, compressedSize);
+    std::printf("Compression of file \"%s\" successful, before/after: %d/%d\n", assetPath.string().c_str(), fileSize,
+                compressedSize);
 
-    // Decompress
-    int decompressedSize = LZ4_decompress_safe(compressed, decompressed, compressedSize, fileSize);
-    if (decompressedSize < 0) {
-      std::cerr << "Decompression failed!\n";
-      delete[] compressed;
-      delete[] decompressed;
-      return 1;
-    }
-    std::cout << "Decompression successful: " << decompressed << "\n";
+    archive.paths.emplace_back(assetPath.string());
+    archive.positions.emplace_back(archivedDataPosition);
+    archive.compressedSizes.emplace_back(compressedSize);
+    archive.decompressedSizes.emplace_back(fileSize);
+    archive.compressedDatas.emplace_back(compressed);
 
-    delete[] compressed;
-    delete[] decompressed;
+    archivedDataPosition += compressedSize;
   }
+
+  return archive;
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+int main() {
+  std::vector<fs::path> filePaths = gather_asset_paths();
+  Archive archive = create_archive(filePaths);
+  dump_to_disk(&archive);
 
   return 0;
 }
