@@ -19,7 +19,7 @@ struct Archive {
   std::vector<uint64_t> positions;
   std::vector<uint64_t> compressedSizes;
   std::vector<uint64_t> decompressedSizes;
-  std::vector<char*> compressedDatas;
+  std::vector<std::vector<char>> compressedDatas;
 };
 /* ------------------------------------------------------------------------------------------------------------------ */
 std::vector<fs::path> gather_asset_paths() {
@@ -56,9 +56,8 @@ void dump_to_disk(Archive* archive) {
     fileHandle << archive->paths[i] << " " << archive->positions[i] << " " << archive->compressedSizes[i] << " "
                << archive->decompressedSizes[i] << "\n";
   }
-  for (const auto& compressedData : archive->compressedDatas) {
-    fileHandle << compressedData;
-    delete[] compressedData;
+  for (size_t i = 0; i < archive->compressedDatas.size(); ++i) {
+    fileHandle.write(archive->compressedDatas[i].data(), archive->compressedSizes[i]);
   }
 
   fileHandle.close();
@@ -67,12 +66,15 @@ void dump_to_disk(Archive* archive) {
 /* ------------------------------------------------------------------------------------------------------------------ */
 Archive create_archive(const std::vector<fs::path>& assetPaths) {
   Archive archive;
-  strcpy(archive.header, "LMent data");
-  archive.paths.reserve(assetPaths.size());
-  archive.positions.reserve(assetPaths.size());
-  archive.compressedSizes.reserve(assetPaths.size());
-  archive.decompressedSizes.reserve(assetPaths.size());
-  archive.compressedDatas.reserve(assetPaths.size());
+  size_t assetsNum = assetPaths.size();
+  sprintf(archive.header, "LMent %zu", assetsNum);
+  // strncpy(archive.header, "LMent data", sizeof(archive.header) - 1);
+  archive.header[sizeof(archive.header) - 1] = '\0';
+  archive.paths.reserve(assetsNum);
+  archive.positions.reserve(assetsNum);
+  archive.compressedSizes.reserve(assetsNum);
+  archive.decompressedSizes.reserve(assetsNum);
+  archive.compressedDatas.reserve(assetsNum);
 
   uint64_t archivedDataPosition{0};
 
@@ -91,14 +93,13 @@ Archive create_archive(const std::vector<fs::path>& assetPaths) {
     assetHandle.close();
 
     // Potentially very large files, so dynamic allocation is required.
-    char* compressed = new char[LZ4_compressBound(fileSize)];
-    memset(compressed, 0, LZ4_compressBound(fileSize));
+    std::vector<char> compressed(LZ4_compressBound(fileSize));
 
     // Compress
-    const int compressedSize = LZ4_compress_fast(buffer.data(), compressed, fileSize, LZ4_compressBound(fileSize), 1);
+    const int compressedSize =
+        LZ4_compress_fast(buffer.data(), compressed.data(), fileSize, LZ4_compressBound(fileSize), 1);
     if (compressedSize <= 0) {
       std::fprintf(stderr, "Compression of file \"%s\" failed.\n", assetPath.string().c_str());
-      delete[] compressed;
       std::exit(1);
     }
     std::printf("Compression of file \"%s\" successful, before/after: %d/%d\n", assetPath.string().c_str(), fileSize,
@@ -108,7 +109,7 @@ Archive create_archive(const std::vector<fs::path>& assetPaths) {
     archive.positions.emplace_back(archivedDataPosition);
     archive.compressedSizes.emplace_back(compressedSize);
     archive.decompressedSizes.emplace_back(fileSize);
-    archive.compressedDatas.emplace_back(compressed);
+    archive.compressedDatas.emplace_back(std::move(compressed));
 
     archivedDataPosition += compressedSize;
   }
