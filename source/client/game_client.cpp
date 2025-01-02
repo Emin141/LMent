@@ -2,15 +2,14 @@
 
 #include <lz4.h>
 
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Network/Socket.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowStyle.hpp>
+#include <fstream>
+#include <sstream>
 
 #include "client/ui/widgets/user_interface.h"
 #include "common/defines.h"

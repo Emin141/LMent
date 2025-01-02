@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <fstream>
+#include <stdexcept>
 
 #include "client/ui/components/button.h"
 #include "client/ui/components/image_widget.h"
@@ -39,8 +40,30 @@ MainMenu::MainMenu(const sf::Vector2u& windowSize) {
   // TODO Temporary, will have a living reference in the asset manager
   const auto& button_style = widgetDesc["button_style"];
   const auto& button_style_states = button_style["states"];
+
   sf::Texture* gameTexture = new sf::Texture();
-  gameTexture->loadFromFile(button_style["texture"]);
+  {
+    std::ifstream file("assets/textures/game_texture.png", std::ios::binary | std::ios::ate);
+    if (!file.is_open()) {
+      throw std::runtime_error("Failed to open file!");
+    }
+
+    // Get the file size
+    std::streamsize fileSize = file.tellg();
+    file.seekg(0, std::ios::beg);
+
+    // Read the file data into a buffer
+    std::vector<char> fileData(fileSize);
+    if (!file.read(fileData.data(), fileSize)) {
+      throw std::runtime_error("Failed to read file data!");
+    }
+
+    // Step 2: Load the texture from memory
+    if (!gameTexture->loadFromMemory(fileData.data(), fileData.size())) {
+      throw std::runtime_error("Failed to load texture from memory!");
+    }
+  }
+
   sf::Font* decoratedFont = new sf::Font();
   decoratedFont->loadFromFile("assets/fonts/NewRocker.ttf");
   sf::SoundBuffer* hoverSoundBuffer = new sf::SoundBuffer();
