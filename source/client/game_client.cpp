@@ -8,8 +8,6 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowStyle.hpp>
-#include <fstream>
-#include <sstream>
 
 #include "client/ui/widgets/user_interface.h"
 #include "common/defines.h"
