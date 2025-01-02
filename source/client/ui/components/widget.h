@@ -49,11 +49,12 @@ class Widget : public sf::Drawable {
   // Mouse interaction
   void set_click_disposition(ClickDisposition value);
   ClickDisposition get_click_disposition() const;
-  virtual void handle_mouse_button_pressed(sf::Mouse::Button mouseButton);
-  virtual void handle_mouse_button_released(sf::Mouse::Button mouseButton);
-  virtual void handle_mouse_hover_start();
-  virtual void handle_mouse_hover_end();
+  virtual void handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& event);
+  virtual void handle_mouse_button_released(const sf::Event::MouseButtonEvent& event);
+  virtual void handle_hover_start();
+  virtual void handle_hover_end();
   virtual bool contains_point(const sf::Vector2i& mousePosition) const;
+  virtual Widget* get_hovered_widget(const sf::Event::MouseMoveEvent& event);
 
   // Children
   Widget* add_child_widget(std::unique_ptr<Widget> childWidget);

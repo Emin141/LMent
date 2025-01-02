@@ -11,10 +11,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowStyle.hpp>
-#include <memory>
 
-#include "client/ui/components/button.h"
-#include "client/ui/components/image_widget.h"
 #include "client/ui/widgets/user_interface.h"
 #include "common/defines.h"
 #include "spdlog/spdlog.h"

@@ -1,8 +1,10 @@
 #include "client/ui/components/widget.h"
-#include "common/misc_util.h"
-#include "spdlog/spdlog.h"
+
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
+
+#include "common/misc_util.h"
+#include "spdlog/spdlog.h"
 /* ------------------------------------------------------------------------------------------------------------------ */
 void Widget::enable() {
   enabled_ = true;
@@ -46,16 +48,20 @@ Widget::ClickDisposition Widget::get_click_disposition() const {
   return clickDisposition_;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::handle_mouse_button_pressed(sf::Mouse::Button mouseButton) {}
+void Widget::handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& event) {}
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::handle_mouse_button_released(sf::Mouse::Button mouseButton) {}
+void Widget::handle_mouse_button_released(const sf::Event::MouseButtonEvent& event) {}
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::handle_mouse_hover_start() {}
+void Widget::handle_hover_start() {}
 /* ------------------------------------------------------------------------------------------------------------------ */
-void Widget::handle_mouse_hover_end() {}
+void Widget::handle_hover_end() {}
 /* ------------------------------------------------------------------------------------------------------------------ */
 bool Widget::contains_point(const sf::Vector2i& mousePosition) const {
   return false;
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+Widget* Widget::get_hovered_widget(const sf::Event::MouseMoveEvent& event) {
+  return nullptr;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 Widget* Widget::add_child_widget(std::unique_ptr<Widget> childWidget) {

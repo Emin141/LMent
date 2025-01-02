@@ -4,8 +4,6 @@ four states: Normal, Hovered, Clicked, and Disabled.
 */
 /* ------------------------------------------------------------------------------------------------------------------ */
 #pragma once
-#include "client/ui/components/widget.h"
-#include "sigslot/signal.hpp"
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -13,6 +11,9 @@ four states: Normal, Hovered, Clicked, and Disabled.
 #include <SFML/System/Vector2.hpp>
 #include <functional>
 #include <unordered_map>
+
+#include "client/ui/components/widget.h"
+#include "sigslot/signal.hpp"
 /* ------------------------------------------------------------------------------------------------------------------ */
 class Button : public Widget {
  public:
@@ -21,7 +22,7 @@ class Button : public Widget {
 
   struct Style {
     sf::IntRect textureRect{};
-    sf::SoundBuffer* soundBuffer{nullptr};  // TODO Maybe not even here?
+    const sf::SoundBuffer* soundBuffer{nullptr};
   };
 
   /* -------------------------------------------------- Functions ------------------------------------------------- */
@@ -36,9 +37,6 @@ class Button : public Widget {
   void enable() override;
   void disable() override;
 
-  void set_state(State value);
-  State get_state() const;
-
   Button& set_style(State state, const Style& style);
 
   void set_position(const sf::Vector2f& value) override;
@@ -49,28 +47,27 @@ class Button : public Widget {
   void bind_clicked_callback(const std::function<void(void)>& callback);
   void bind_clicked_when_disabled_callback(const std::function<void(void)>& callback);
 
-  void handle_mouse_button_pressed(sf::Mouse::Button mouseButton) override;
-  void handle_mouse_button_released(sf::Mouse::Button mouseButton) override;
-  void handle_mouse_hover_start() override;
-  void handle_mouse_hover_end() override;
+  void handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& event) override;
+  void handle_mouse_button_released(const sf::Event::MouseButtonEvent& event) override;
+  void handle_hover_start() override;
+  void handle_hover_end() override;
   bool contains_point(const sf::Vector2i& mousePosition) const override;
+  Widget* get_hovered_widget(const sf::Event::MouseMoveEvent& event) override;
   void update(float deltaTime) override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
  private:
   /* -------------------------------------------------- Functions ------------------------------------------------- */
-  void on_mouse_button_pressed(sf::Mouse::Button mouseButton);
-  void on_mouse_button_released(sf::Mouse::Button mouseButton);
-  void on_mouse_hover_start();
-  void on_mouse_hover_end();
+  void on_lmb_pressed();
+  void on_lmb_released();
+  void on_hover_start();
+  void on_hover_end();
 
   /* -------------------------------------------------- Variables ------------------------------------------------- */
   const sf::Texture* texture;
   sf::Text text_;
-  State state_{State::Normal};
   std::unordered_map<State, Style> styles_{
       {State::Normal, Style{}}, {State::Hovered, Style{}}, {State::Clicked, Style{}}, {State::Disabled, Style{}}};
-  sf::Sound stateChangeSound_;
   sigslot::signal<> clicked_;
   sigslot::signal<> hovered_;
   sigslot::signal<> clickedWhenDisabled_;

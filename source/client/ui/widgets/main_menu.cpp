@@ -1,5 +1,7 @@
 #include "client/ui/widgets/main_menu.h"
 
+#include <SFML/Audio.hpp>
+#include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -11,7 +13,7 @@
 #include "json/json.hpp"
 /* ------------------------------------------------------------------------------------------------------------------ */
 using nlohmann::json;
-/* ---------------------------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------------------ */
 MainMenu::MainMenu(const sf::Vector2u& windowSize) {
   clickDisposition_ = Widget::ClickDisposition::ChildrenClickable;
   childWidgets_.reserve(5);
@@ -32,7 +34,7 @@ MainMenu::MainMenu(const sf::Vector2u& windowSize) {
   backgroundTexture->loadFromFile(childrenDesc[0]["resource"]);
   auto background = std::make_unique<ImageWidget>(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(windowSize), backgroundTexture,
                                                   sf::IntRect(0, 0, windowSize.x, windowSize.y));
-  childWidgets_.emplace_back(std::move(background));
+  this->add_child_widget(std::move(background));
 
   // TODO Temporary, will have a living reference in the asset manager
   const auto& button_style = widgetDesc["button_style"];
@@ -41,13 +43,15 @@ MainMenu::MainMenu(const sf::Vector2u& windowSize) {
   gameTexture->loadFromFile(button_style["texture"]);
   sf::Font* decoratedFont = new sf::Font();
   decoratedFont->loadFromFile("assets/fonts/NewRocker.ttf");
+  sf::SoundBuffer* hoverSoundBuffer = new sf::SoundBuffer();
+  hoverSoundBuffer->loadFromFile(button_style_states[1]["sound"]);
 
   Button::Style normalStyle{sf::IntRect{button_style_states[0]["sprite_x"], button_style_states[0]["sprite_y"],
                                         button_style_states[0]["sprite_w"], button_style_states[0]["sprite_h"]},
                             nullptr};
   Button::Style hoveredStyle{sf::IntRect{button_style_states[1]["sprite_x"], button_style_states[1]["sprite_y"],
                                          button_style_states[1]["sprite_w"], button_style_states[1]["sprite_h"]},
-                             nullptr};
+                             hoverSoundBuffer};
   Button::Style clickedStyle{sf::IntRect{button_style_states[2]["sprite_x"], button_style_states[2]["sprite_y"],
                                          button_style_states[2]["sprite_w"], button_style_states[2]["sprite_h"]},
                              nullptr};
@@ -62,9 +66,9 @@ MainMenu::MainMenu(const sf::Vector2u& windowSize) {
     joinButton->set_style(Button::State::Normal, normalStyle)
         .set_style(Button::State::Hovered, hoveredStyle)
         .set_style(Button::State::Clicked, clickedStyle);
-    joinButton->set_state(Button::State::Normal);
+    joinButton->enable();
 
-    childWidgets_.emplace_back(std::move(joinButton));
+    this->add_child_widget(std::move(joinButton));
   }
   {
     const auto& buttonDesc = childrenDesc[2];
@@ -74,9 +78,9 @@ MainMenu::MainMenu(const sf::Vector2u& windowSize) {
     hostButton->set_style(Button::State::Normal, normalStyle)
         .set_style(Button::State::Hovered, hoveredStyle)
         .set_style(Button::State::Clicked, clickedStyle);
-    hostButton->set_state(Button::State::Normal);
+    hostButton->enable();
 
-    childWidgets_.emplace_back(std::move(hostButton));
+    this->add_child_widget(std::move(hostButton));
   }
   {
     const auto& buttonDesc = childrenDesc[3];
@@ -86,9 +90,9 @@ MainMenu::MainMenu(const sf::Vector2u& windowSize) {
     settingsButton->set_style(Button::State::Normal, normalStyle)
         .set_style(Button::State::Hovered, hoveredStyle)
         .set_style(Button::State::Clicked, clickedStyle);
-    settingsButton->set_state(Button::State::Normal);
+    settingsButton->enable();
 
-    childWidgets_.emplace_back(std::move(settingsButton));
+    this->add_child_widget(std::move(settingsButton));
   }
   {
     const auto& buttonDesc = childrenDesc[4];
@@ -98,30 +102,57 @@ MainMenu::MainMenu(const sf::Vector2u& windowSize) {
     exitButton->set_style(Button::State::Normal, normalStyle)
         .set_style(Button::State::Hovered, hoveredStyle)
         .set_style(Button::State::Clicked, clickedStyle);
-    exitButton->set_state(Button::State::Normal);
+    exitButton->enable();
 
-    childWidgets_.emplace_back(std::move(exitButton));
+    this->add_child_widget(std::move(exitButton));
   }
 }
-/* ------------------------------------------------------------------------------------------------------------------
- */
+/* ------------------------------------------------------------------------------------------------------------------ */
 void MainMenu::bindJoinCallback(const std::function<void(void)>& callback) {
   joinCallback.connect(callback);
 }
-/* ------------------------------------------------------------------------------------------------------------------
- */
+/* ------------------------------------------------------------------------------------------------------------------ */
 void MainMenu::bindHostCallback(const std::function<void(void)>& callback) {
   hostCallback.connect(callback);
 }
-/* ------------------------------------------------------------------------------------------------------------------
- */
+/* ------------------------------------------------------------------------------------------------------------------ */
 void MainMenu::bindSettingsCallback(const std::function<void(void)>& callback) {
   settingsCallback.connect(callback);
 }
-/* ------------------------------------------------------------------------------------------------------------------
- */
+/* ------------------------------------------------------------------------------------------------------------------ */
 void MainMenu::bindExitCallback(const std::function<void(void)>& callback) {
   exitCallback.connect(callback);
 }
-/* ------------------------------------------------------------------------------------------------------------------
- */
+/* ------------------------------------------------------------------------------------------------------------------ */
+void MainMenu::handle_mouse_button_pressed(const sf::Event::MouseButtonEvent& event) {
+  for (auto& childWidget : childWidgets_) {
+    if (childWidget->contains_point({event.x, event.y})) {
+      childWidget->handle_mouse_button_pressed(event);
+      break;
+    }
+  }
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+void MainMenu::handle_mouse_button_released(const sf::Event::MouseButtonEvent& event) {
+  for (auto& childWidget : childWidgets_) {
+    if (childWidget->contains_point({event.x, event.y})) {
+      childWidget->handle_mouse_button_released(event);
+      break;
+    }
+  }
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+bool MainMenu::contains_point(const sf::Vector2i& mousePosition) const {
+  return true;
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+Widget* MainMenu::get_hovered_widget(const sf::Event::MouseMoveEvent& event) {
+  for (auto& childWidget : childWidgets_) {
+    if (childWidget->contains_point({event.x, event.y})) {
+      return childWidget.get();
+    }
+  }
+
+  return nullptr;
+}
+/* ------------------------------------------------------------------------------------------------------------------ */

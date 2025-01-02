@@ -1,12 +1,16 @@
 #include "client/ui/widgets/user_interface.h"
+
+#include <memory>
+
 #include "client/ui/components/widget.h"
 /* ------------------------------------------------------------------------------------------------------------------ */
-UserInterface::UserInterface(const sf::Vector2u& windowSize) : mainMenu_(windowSize) {
+UserInterface::UserInterface(const sf::Vector2u& windowSize) {
   clickDisposition_ = ClickDisposition::ChildrenClickable;
 
-  childWidgets_.reserve(1);  // TODO Update this when new screens are added.
+  mainMenu_ = dynamic_cast<MainMenu*>(childWidgets_.emplace_back(std::make_unique<MainMenu>(windowSize)).get());
+  mainMenu_->bindExitCallback([] { std::exit(0); });
 
-  activeScreen_ = &mainMenu_;
+  activeScreen_ = mainMenu_;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 void UserInterface::handle_input(const sf::Event& inputEvent) {
@@ -32,7 +36,7 @@ void UserInterface::handle_input(const sf::Event& inputEvent) {
       sf::Vector2i mousePosition{inputEvent.mouseButton.x, inputEvent.mouseButton.y};
       for (auto& childWidget : childWidgets_) {
         if (childWidget->contains_point(mousePosition)) {
-          childWidget->handle_mouse_button_pressed(inputEvent.mouseButton.button);
+          childWidget->handle_mouse_button_pressed(inputEvent.mouseButton);
           break;
         }
       }
@@ -42,8 +46,7 @@ void UserInterface::handle_input(const sf::Event& inputEvent) {
       sf::Vector2i mousePosition{inputEvent.mouseButton.x, inputEvent.mouseButton.y};
       for (auto& childWidget : childWidgets_) {
         if (childWidget->contains_point(mousePosition)) {
-          childWidget->handle_mouse_button_released(inputEvent.mouseButton.button);
-          focusedWidget_ = childWidget.get();
+          childWidget->handle_mouse_button_released(inputEvent.mouseButton);
           break;
         }
       }
@@ -51,18 +54,18 @@ void UserInterface::handle_input(const sf::Event& inputEvent) {
     }
     case sf::Event::MouseMoved: {
       sf::Vector2i mousePosition{inputEvent.mouseMove.x, inputEvent.mouseMove.y};
-      if (hoveredWidget_ != nullptr) {
-        if (hoveredWidget_->contains_point(mousePosition) == false) {
-          hoveredWidget_->handle_mouse_hover_end();
-          hoveredWidget_ = nullptr;
-        }
+
+      // Checks if the hovered widget from the last frame became unhovered.
+      if (hoveredWidget_ != nullptr && !hoveredWidget_->contains_point(mousePosition)) {
+        hoveredWidget_->handle_hover_end();
+        hoveredWidget_ = nullptr;
       }
+
       for (auto& childWidget : childWidgets_) {
-        if (childWidget->contains_point(mousePosition) &&
-            (childWidget->get_click_disposition() == Widget::ClickDisposition::Clickable) &&
-            (childWidget.get() != hoveredWidget_)) {
-          hoveredWidget_ = childWidget.get();
-          hoveredWidget_->handle_mouse_hover_start();
+        if (Widget* hoverCandidate = childWidget->get_hovered_widget(inputEvent.mouseMove);
+            hoverCandidate != nullptr && hoverCandidate != hoveredWidget_) {
+          hoveredWidget_ = hoverCandidate;
+          hoveredWidget_->handle_hover_start();
           break;
         }
       }

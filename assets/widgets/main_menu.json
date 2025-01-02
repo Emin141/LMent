@@ -19,7 +19,7 @@
                 "sprite_y": 100,
                 "sprite_w": 320,
                 "sprite_h": 100,
-                "sound": null
+                "sound": "/home/temin/Projects/LMent/assets/test/ui-sounds/Audio/switch4.ogg"
             },
             {
                 "state": "Clicked",

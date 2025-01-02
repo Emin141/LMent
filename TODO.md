@@ -2,7 +2,12 @@
 
 ## UI
 
-- Make so that widgets can be read from JSON files
+- Maybe make alignments after all?
+- **IMPORTANT** Sadly, I need to figure out how to handle hovering and focusing of widgets in the tree-structure. The user interface needs to get the final hovered/focused child.
+
+## Sound manager
+
+- I should make a sound manager before I make the asset manager.
 
 ## Build script
 
